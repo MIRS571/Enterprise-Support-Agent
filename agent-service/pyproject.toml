@@ -1,0 +1,47 @@
+[project]
+name = "enterprise-agent-service"
+version = "0.1.0"
+description = "AI orchestration service for the enterprise support agent"
+readme = "README.md"
+requires-python = ">=3.12,<3.13"
+dependencies = [
+    "fastapi>=0.141.1,<0.142.0",
+    "fastembed>=0.7.0,<1.0.0",
+    "httpx>=0.28.1,<1.0.0",
+    "langchain-deepseek>=1.1.0",
+    "langchain-huggingface[full]>=1.2.2,<2.0.0",
+    "langchain-qdrant>=1.1.0,<2.0.0",
+    "langchain-text-splitters>=1.1.2",
+    "langgraph>=1.2.11",
+    "langgraph-checkpoint-postgres>=3.1.2,<4.0.0",
+    "psycopg[binary,pool]>=3.2.0,<4.0.0",
+    "pydantic-settings>=2.10.1,<3.0.0",
+    "qdrant-client>=1.15.1,<2.0.0",
+    "redis>=8.1.0,<9.0.0",
+    "torch>=2.13.0,<3.0.0",
+    "uvicorn[standard]>=0.35.0,<1.0.0",
+]
+
+[tool.uv.sources]
+torch = [
+    { index = "pytorch-cpu" },
+]
+
+[[tool.uv.index]]
+name = "pytorch-cpu"
+url = "https://download.pytorch.org/whl/cpu"
+explicit = true
+
+[dependency-groups]
+dev = [
+    "pytest>=8.4.1,<9.0.0",
+    "ruff>=0.12.8,<1.0.0",
+]
+
+[tool.pytest.ini_options]
+pythonpath = ["src"]
+testpaths = ["tests"]
+
+[tool.ruff]
+line-length = 88
+target-version = "py312"

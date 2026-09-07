@@ -1,0 +1,3301 @@
+{
+  "configuration": {
+    "collection": "enterprise_support_knowledge_hybrid_v1",
+    "dense_embedding": "sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2",
+    "sparse_embedding": "Qdrant/bm25",
+    "fusion": "RRF",
+    "reranker": "BAAI/bge-reranker-base",
+    "top_k": 3,
+    "candidate_k": 10,
+    "repetitions": 3
+  },
+  "ingestion": [
+    {
+      "catalog": "data\\knowledge\\company_001\\catalog.json",
+      "document_count": 2,
+      "chunk_count": 9
+    },
+    {
+      "catalog": "data\\knowledge\\evaluation_001\\catalog.json",
+      "document_count": 1,
+      "chunk_count": 4
+    }
+  ],
+  "pipelines": [
+    {
+      "name": "dense",
+      "summary": {
+        "top_k": 3,
+        "total_cases": 30,
+        "pass_rate": 0.9666666666666667,
+        "positive_cases": 27,
+        "hit_at_k": 0.9629629629629629,
+        "mean_reciprocal_rank": 0.8703703703703703,
+        "mean_ndcg": 0.8937381390211651,
+        "empty_cases": 3,
+        "empty_result_accuracy": 1.0,
+        "tenant_isolation_violations": 0
+      },
+      "latency_ms": {
+        "sample_count": 90,
+        "mean": 30.167,
+        "p95": 71.802,
+        "max": 76.805
+      },
+      "cases": [
+        {
+          "case_id": "refund-unshipped-cancel",
+          "passed": true,
+          "expect_empty": false,
+          "returned_count": 3,
+          "first_relevant_rank": 1,
+          "reciprocal_rank": 1.0,
+          "first_relevant_score": 0.7265806,
+          "tenant_isolation_violations": 0,
+          "relevant_ranks": [
+            1
+          ],
+          "ndcg_at_k": 1.0,
+          "latency_ms": 65.899,
+          "ranking": [
+            {
+              "rank": 1,
+              "document_id": "refund-policy",
+              "section_title": "未发货订单",
+              "final_score": 0.7265806,
+              "retrieval_score": null
+            },
+            {
+              "rank": 2,
+              "document_id": "refund-policy",
+              "section_title": "已发货订单",
+              "final_score": 0.59131014,
+              "retrieval_score": null
+            },
+            {
+              "rank": 3,
+              "document_id": "refund-policy",
+              "section_title": "退款资格说明",
+              "final_score": 0.5778867,
+              "retrieval_score": null
+            }
+          ]
+        },
+        {
+          "case_id": "refund-unshipped-original-payment",
+          "passed": true,
+          "expect_empty": false,
+          "returned_count": 3,
+          "first_relevant_rank": 1,
+          "reciprocal_rank": 1.0,
+          "first_relevant_score": 0.7389257,
+          "tenant_isolation_violations": 0,
+          "relevant_ranks": [
+            1
+          ],
+          "ndcg_at_k": 1.0,
+          "latency_ms": 71.802,
+          "ranking": [
+            {
+              "rank": 1,
+              "document_id": "refund-policy",
+              "section_title": "未发货订单",
+              "final_score": 0.7389257,
+              "retrieval_score": null
+            },
+            {
+              "rank": 2,
+              "document_id": "refund-policy",
+              "section_title": "已发货订单",
+              "final_score": 0.62570477,
+              "retrieval_score": null
+            },
+            {
+              "rank": 3,
+              "document_id": "refund-policy",
+              "section_title": "退款资格说明",
+              "final_score": 0.5461713,
+              "retrieval_score": null
+            }
+          ]
+        },
+        {
+          "case_id": "refund-paid-not-shipped",
+          "passed": true,
+          "expect_empty": false,
+          "returned_count": 3,
+          "first_relevant_rank": 1,
+          "reciprocal_rank": 1.0,
+          "first_relevant_score": 0.6033217,
+          "tenant_isolation_violations": 0,
+          "relevant_ranks": [
+            1
+          ],
+          "ndcg_at_k": 1.0,
+          "latency_ms": 61.489,
+          "ranking": [
+            {
+              "rank": 1,
+              "document_id": "refund-policy",
+              "section_title": "未发货订单",
+              "final_score": 0.6033217,
+              "retrieval_score": null
+            },
+            {
+              "rank": 2,
+              "document_id": "refund-policy",
+              "section_title": "已发货订单",
+              "final_score": 0.5824144,
+              "retrieval_score": null
+            },
+            {
+              "rank": 3,
+              "document_id": "shipping-policy",
+              "section_title": "订单状态说明",
+              "final_score": 0.5239446,
+              "retrieval_score": null
+            }
+          ]
+        },
+        {
+          "case_id": "refund-shipped-no-direct-cancel",
+          "passed": true,
+          "expect_empty": false,
+          "returned_count": 3,
+          "first_relevant_rank": 3,
+          "reciprocal_rank": 0.3333333333333333,
+          "first_relevant_score": 0.5231131,
+          "tenant_isolation_violations": 0,
+          "relevant_ranks": [
+            3
+          ],
+          "ndcg_at_k": 0.5,
+          "latency_ms": 61.481,
+          "ranking": [
+            {
+              "rank": 1,
+              "document_id": "refund-policy",
+              "section_title": "未发货订单",
+              "final_score": 0.58785,
+              "retrieval_score": null
+            },
+            {
+              "rank": 2,
+              "document_id": "shipping-policy",
+              "section_title": "订单状态说明",
+              "final_score": 0.5574831,
+              "retrieval_score": null
+            },
+            {
+              "rank": 3,
+              "document_id": "refund-policy",
+              "section_title": "已发货订单",
+              "final_score": 0.5231131,
+              "retrieval_score": null
+            }
+          ]
+        },
+        {
+          "case_id": "refund-shipped-return-after-receipt",
+          "passed": true,
+          "expect_empty": false,
+          "returned_count": 3,
+          "first_relevant_rank": 3,
+          "reciprocal_rank": 0.3333333333333333,
+          "first_relevant_score": 0.66528386,
+          "tenant_isolation_violations": 0,
+          "relevant_ranks": [
+            3
+          ],
+          "ndcg_at_k": 0.5,
+          "latency_ms": 21.253,
+          "ranking": [
+            {
+              "rank": 1,
+              "document_id": "refund-policy",
+              "section_title": "未发货订单",
+              "final_score": 0.74942404,
+              "retrieval_score": null
+            },
+            {
+              "rank": 2,
+              "document_id": "refund-policy",
+              "section_title": "退款资格说明",
+              "final_score": 0.6727799,
+              "retrieval_score": null
+            },
+            {
+              "rank": 3,
+              "document_id": "refund-policy",
+              "section_title": "已发货订单",
+              "final_score": 0.66528386,
+              "retrieval_score": null
+            }
+          ]
+        },
+        {
+          "case_id": "refund-shipping-interception",
+          "passed": false,
+          "expect_empty": false,
+          "returned_count": 3,
+          "first_relevant_rank": null,
+          "reciprocal_rank": 0.0,
+          "first_relevant_score": null,
+          "tenant_isolation_violations": 0,
+          "relevant_ranks": [],
+          "ndcg_at_k": 0.0,
+          "latency_ms": 70.881,
+          "ranking": [
+            {
+              "rank": 1,
+              "document_id": "shipping-policy",
+              "section_title": "订单状态说明",
+              "final_score": 0.5489632,
+              "retrieval_score": null
+            },
+            {
+              "rank": 2,
+              "document_id": "shipping-policy",
+              "section_title": "物流轨迹",
+              "final_score": 0.5383977,
+              "retrieval_score": null
+            },
+            {
+              "rank": 3,
+              "document_id": "shipping-policy",
+              "section_title": "物流延迟",
+              "final_score": 0.46437034,
+              "retrieval_score": null
+            }
+          ]
+        },
+        {
+          "case_id": "refund-opened-software",
+          "passed": true,
+          "expect_empty": false,
+          "returned_count": 3,
+          "first_relevant_rank": 3,
+          "reciprocal_rank": 0.3333333333333333,
+          "first_relevant_score": 0.46262616,
+          "tenant_isolation_violations": 0,
+          "relevant_ranks": [
+            3
+          ],
+          "ndcg_at_k": 0.5,
+          "latency_ms": 22.158,
+          "ranking": [
+            {
+              "rank": 1,
+              "document_id": "refund-policy",
+              "section_title": "退款资格说明",
+              "final_score": 0.5611571,
+              "retrieval_score": null
+            },
+            {
+              "rank": 2,
+              "document_id": "refund-policy",
+              "section_title": "未发货订单",
+              "final_score": 0.48731452,
+              "retrieval_score": null
+            },
+            {
+              "rank": 3,
+              "document_id": "refund-policy",
+              "section_title": "七天无理由退货",
+              "final_score": 0.46262616,
+              "retrieval_score": null
+            }
+          ]
+        },
+        {
+          "case_id": "refund-activated-digital-product",
+          "passed": true,
+          "expect_empty": false,
+          "returned_count": 3,
+          "first_relevant_rank": 1,
+          "reciprocal_rank": 1.0,
+          "first_relevant_score": 0.7397246,
+          "tenant_isolation_violations": 0,
+          "relevant_ranks": [
+            1
+          ],
+          "ndcg_at_k": 1.0,
+          "latency_ms": 69.868,
+          "ranking": [
+            {
+              "rank": 1,
+              "document_id": "refund-policy",
+              "section_title": "七天无理由退货",
+              "final_score": 0.7397246,
+              "retrieval_score": null
+            },
+            {
+              "rank": 2,
+              "document_id": "refund-policy",
+              "section_title": "退款资格说明",
+              "final_score": 0.48546553,
+              "retrieval_score": null
+            },
+            {
+              "rank": 3,
+              "document_id": "refund-policy",
+              "section_title": "未发货订单",
+              "final_score": 0.44467354,
+              "retrieval_score": null
+            }
+          ]
+        },
+        {
+          "case_id": "refund-seven-day-condition",
+          "passed": true,
+          "expect_empty": false,
+          "returned_count": 3,
+          "first_relevant_rank": 1,
+          "reciprocal_rank": 1.0,
+          "first_relevant_score": 0.8187487,
+          "tenant_isolation_violations": 0,
+          "relevant_ranks": [
+            1
+          ],
+          "ndcg_at_k": 1.0,
+          "latency_ms": 18.793,
+          "ranking": [
+            {
+              "rank": 1,
+              "document_id": "refund-policy",
+              "section_title": "七天无理由退货",
+              "final_score": 0.8187487,
+              "retrieval_score": null
+            },
+            {
+              "rank": 2,
+              "document_id": "refund-policy",
+              "section_title": "退款资格说明",
+              "final_score": 0.5020027,
+              "retrieval_score": null
+            },
+            {
+              "rank": 3,
+              "document_id": "refund-policy",
+              "section_title": "未发货订单",
+              "final_score": 0.4901927,
+              "retrieval_score": null
+            }
+          ]
+        },
+        {
+          "case_id": "refund-quality-shipping-fee",
+          "passed": true,
+          "expect_empty": false,
+          "returned_count": 3,
+          "first_relevant_rank": 1,
+          "reciprocal_rank": 1.0,
+          "first_relevant_score": 0.51925,
+          "tenant_isolation_violations": 0,
+          "relevant_ranks": [
+            1
+          ],
+          "ndcg_at_k": 1.0,
+          "latency_ms": 73.324,
+          "ranking": [
+            {
+              "rank": 1,
+              "document_id": "refund-policy",
+              "section_title": "质量问题",
+              "final_score": 0.51925,
+              "retrieval_score": null
+            },
+            {
+              "rank": 2,
+              "document_id": "refund-policy",
+              "section_title": "退款资格说明",
+              "final_score": 0.5041244,
+              "retrieval_score": null
+            },
+            {
+              "rank": 3,
+              "document_id": "refund-policy",
+              "section_title": "未发货订单",
+              "final_score": 0.4735455,
+              "retrieval_score": null
+            }
+          ]
+        },
+        {
+          "case_id": "refund-quality-evidence",
+          "passed": true,
+          "expect_empty": false,
+          "returned_count": 3,
+          "first_relevant_rank": 1,
+          "reciprocal_rank": 1.0,
+          "first_relevant_score": 0.6026243,
+          "tenant_isolation_violations": 0,
+          "relevant_ranks": [
+            1
+          ],
+          "ndcg_at_k": 1.0,
+          "latency_ms": 18.042,
+          "ranking": [
+            {
+              "rank": 1,
+              "document_id": "refund-policy",
+              "section_title": "质量问题",
+              "final_score": 0.6026243,
+              "retrieval_score": null
+            },
+            {
+              "rank": 2,
+              "document_id": "shipping-policy",
+              "section_title": "包裹破损或缺失",
+              "final_score": 0.59365267,
+              "retrieval_score": null
+            },
+            {
+              "rank": 3,
+              "document_id": "refund-policy",
+              "section_title": "七天无理由退货",
+              "final_score": 0.43244922,
+              "retrieval_score": null
+            }
+          ]
+        },
+        {
+          "case_id": "refund-quality-review",
+          "passed": true,
+          "expect_empty": false,
+          "returned_count": 3,
+          "first_relevant_rank": 1,
+          "reciprocal_rank": 1.0,
+          "first_relevant_score": 0.48566917,
+          "tenant_isolation_violations": 0,
+          "relevant_ranks": [
+            1
+          ],
+          "ndcg_at_k": 1.0,
+          "latency_ms": 58.73,
+          "ranking": [
+            {
+              "rank": 1,
+              "document_id": "refund-policy",
+              "section_title": "质量问题",
+              "final_score": 0.48566917,
+              "retrieval_score": null
+            },
+            {
+              "rank": 2,
+              "document_id": "shipping-policy",
+              "section_title": "订单状态说明",
+              "final_score": 0.47675648,
+              "retrieval_score": null
+            },
+            {
+              "rank": 3,
+              "document_id": "refund-policy",
+              "section_title": "已发货订单",
+              "final_score": 0.4762805,
+              "retrieval_score": null
+            }
+          ]
+        },
+        {
+          "case_id": "refund-flag-not-completed",
+          "passed": true,
+          "expect_empty": false,
+          "returned_count": 3,
+          "first_relevant_rank": 1,
+          "reciprocal_rank": 1.0,
+          "first_relevant_score": 0.73595124,
+          "tenant_isolation_violations": 0,
+          "relevant_ranks": [
+            1
+          ],
+          "ndcg_at_k": 1.0,
+          "latency_ms": 76.805,
+          "ranking": [
+            {
+              "rank": 1,
+              "document_id": "refund-policy",
+              "section_title": "退款资格说明",
+              "final_score": 0.73595124,
+              "retrieval_score": null
+            },
+            {
+              "rank": 2,
+              "document_id": "refund-policy",
+              "section_title": "未发货订单",
+              "final_score": 0.72106934,
+              "retrieval_score": null
+            },
+            {
+              "rank": 3,
+              "document_id": "refund-policy",
+              "section_title": "已发货订单",
+              "final_score": 0.6421846,
+              "retrieval_score": null
+            }
+          ]
+        },
+        {
+          "case_id": "refund-flag-not-guaranteed",
+          "passed": true,
+          "expect_empty": false,
+          "returned_count": 3,
+          "first_relevant_rank": 1,
+          "reciprocal_rank": 1.0,
+          "first_relevant_score": 0.7255372,
+          "tenant_isolation_violations": 0,
+          "relevant_ranks": [
+            1
+          ],
+          "ndcg_at_k": 1.0,
+          "latency_ms": 17.278,
+          "ranking": [
+            {
+              "rank": 1,
+              "document_id": "refund-policy",
+              "section_title": "退款资格说明",
+              "final_score": 0.7255372,
+              "retrieval_score": null
+            },
+            {
+              "rank": 2,
+              "document_id": "refund-policy",
+              "section_title": "未发货订单",
+              "final_score": 0.6128202,
+              "retrieval_score": null
+            },
+            {
+              "rank": 3,
+              "document_id": "refund-policy",
+              "section_title": "已发货订单",
+              "final_score": 0.48280233,
+              "retrieval_score": null
+            }
+          ]
+        },
+        {
+          "case_id": "refund-final-review-result",
+          "passed": true,
+          "expect_empty": false,
+          "returned_count": 3,
+          "first_relevant_rank": 1,
+          "reciprocal_rank": 1.0,
+          "first_relevant_score": 0.7495291,
+          "tenant_isolation_violations": 0,
+          "relevant_ranks": [
+            1
+          ],
+          "ndcg_at_k": 1.0,
+          "latency_ms": 59.527,
+          "ranking": [
+            {
+              "rank": 1,
+              "document_id": "refund-policy",
+              "section_title": "退款资格说明",
+              "final_score": 0.7495291,
+              "retrieval_score": null
+            },
+            {
+              "rank": 2,
+              "document_id": "refund-policy",
+              "section_title": "未发货订单",
+              "final_score": 0.6649276,
+              "retrieval_score": null
+            },
+            {
+              "rank": 3,
+              "document_id": "refund-policy",
+              "section_title": "已发货订单",
+              "final_score": 0.56016684,
+              "retrieval_score": null
+            }
+          ]
+        },
+        {
+          "case_id": "shipping-status-unshipped",
+          "passed": true,
+          "expect_empty": false,
+          "returned_count": 3,
+          "first_relevant_rank": 1,
+          "reciprocal_rank": 1.0,
+          "first_relevant_score": 0.71351385,
+          "tenant_isolation_violations": 0,
+          "relevant_ranks": [
+            1
+          ],
+          "ndcg_at_k": 1.0,
+          "latency_ms": 17.453,
+          "ranking": [
+            {
+              "rank": 1,
+              "document_id": "shipping-policy",
+              "section_title": "订单状态说明",
+              "final_score": 0.71351385,
+              "retrieval_score": null
+            },
+            {
+              "rank": 2,
+              "document_id": "refund-policy",
+              "section_title": "未发货订单",
+              "final_score": 0.62539715,
+              "retrieval_score": null
+            },
+            {
+              "rank": 3,
+              "document_id": "refund-policy",
+              "section_title": "已发货订单",
+              "final_score": 0.6156889,
+              "retrieval_score": null
+            }
+          ]
+        },
+        {
+          "case_id": "shipping-status-shipped",
+          "passed": true,
+          "expect_empty": false,
+          "returned_count": 3,
+          "first_relevant_rank": 1,
+          "reciprocal_rank": 1.0,
+          "first_relevant_score": 0.7151271,
+          "tenant_isolation_violations": 0,
+          "relevant_ranks": [
+            1
+          ],
+          "ndcg_at_k": 1.0,
+          "latency_ms": 74.717,
+          "ranking": [
+            {
+              "rank": 1,
+              "document_id": "shipping-policy",
+              "section_title": "订单状态说明",
+              "final_score": 0.7151271,
+              "retrieval_score": null
+            },
+            {
+              "rank": 2,
+              "document_id": "shipping-policy",
+              "section_title": "物流轨迹",
+              "final_score": 0.5799451,
+              "retrieval_score": null
+            },
+            {
+              "rank": 3,
+              "document_id": "refund-policy",
+              "section_title": "已发货订单",
+              "final_score": 0.5694754,
+              "retrieval_score": null
+            }
+          ]
+        },
+        {
+          "case_id": "shipping-status-completed",
+          "passed": true,
+          "expect_empty": false,
+          "returned_count": 3,
+          "first_relevant_rank": 1,
+          "reciprocal_rank": 1.0,
+          "first_relevant_score": 0.5419301,
+          "tenant_isolation_violations": 0,
+          "relevant_ranks": [
+            1
+          ],
+          "ndcg_at_k": 1.0,
+          "latency_ms": 18.376,
+          "ranking": [
+            {
+              "rank": 1,
+              "document_id": "shipping-policy",
+              "section_title": "订单状态说明",
+              "final_score": 0.5419301,
+              "retrieval_score": null
+            },
+            {
+              "rank": 2,
+              "document_id": "shipping-policy",
+              "section_title": "物流轨迹",
+              "final_score": 0.48584667,
+              "retrieval_score": null
+            },
+            {
+              "rank": 3,
+              "document_id": "refund-policy",
+              "section_title": "已发货订单",
+              "final_score": 0.47460628,
+              "retrieval_score": null
+            }
+          ]
+        },
+        {
+          "case_id": "shipping-live-location",
+          "passed": true,
+          "expect_empty": false,
+          "returned_count": 3,
+          "first_relevant_rank": 1,
+          "reciprocal_rank": 1.0,
+          "first_relevant_score": 0.5706663,
+          "tenant_isolation_violations": 0,
+          "relevant_ranks": [
+            1
+          ],
+          "ndcg_at_k": 1.0,
+          "latency_ms": 58.411,
+          "ranking": [
+            {
+              "rank": 1,
+              "document_id": "shipping-policy",
+              "section_title": "物流轨迹",
+              "final_score": 0.5706663,
+              "retrieval_score": null
+            },
+            {
+              "rank": 2,
+              "document_id": "shipping-policy",
+              "section_title": "物流延迟",
+              "final_score": 0.5218476,
+              "retrieval_score": null
+            },
+            {
+              "rank": 3,
+              "document_id": "shipping-policy",
+              "section_title": "订单状态说明",
+              "final_score": 0.4906727,
+              "retrieval_score": null
+            }
+          ]
+        },
+        {
+          "case_id": "shipping-estimated-arrival",
+          "passed": true,
+          "expect_empty": false,
+          "returned_count": 3,
+          "first_relevant_rank": 2,
+          "reciprocal_rank": 0.5,
+          "first_relevant_score": 0.4748785,
+          "tenant_isolation_violations": 0,
+          "relevant_ranks": [
+            2
+          ],
+          "ndcg_at_k": 0.6309297535714575,
+          "latency_ms": 18.351,
+          "ranking": [
+            {
+              "rank": 1,
+              "document_id": "shipping-policy",
+              "section_title": "订单状态说明",
+              "final_score": 0.49835795,
+              "retrieval_score": null
+            },
+            {
+              "rank": 2,
+              "document_id": "shipping-policy",
+              "section_title": "物流轨迹",
+              "final_score": 0.4748785,
+              "retrieval_score": null
+            },
+            {
+              "rank": 3,
+              "document_id": "shipping-policy",
+              "section_title": "物流延迟",
+              "final_score": 0.46766242,
+              "retrieval_score": null
+            }
+          ]
+        },
+        {
+          "case_id": "shipping-carrier-tracking",
+          "passed": true,
+          "expect_empty": false,
+          "returned_count": 3,
+          "first_relevant_rank": 1,
+          "reciprocal_rank": 1.0,
+          "first_relevant_score": 0.42426357,
+          "tenant_isolation_violations": 0,
+          "relevant_ranks": [
+            1
+          ],
+          "ndcg_at_k": 1.0,
+          "latency_ms": 58.483,
+          "ranking": [
+            {
+              "rank": 1,
+              "document_id": "shipping-policy",
+              "section_title": "物流轨迹",
+              "final_score": 0.42426357,
+              "retrieval_score": null
+            },
+            {
+              "rank": 2,
+              "document_id": "shipping-policy",
+              "section_title": "物流延迟",
+              "final_score": 0.3986313,
+              "retrieval_score": null
+            },
+            {
+              "rank": 3,
+              "document_id": "shipping-policy",
+              "section_title": "订单状态说明",
+              "final_score": 0.36443222,
+              "retrieval_score": null
+            }
+          ]
+        },
+        {
+          "case_id": "shipping-delay",
+          "passed": true,
+          "expect_empty": false,
+          "returned_count": 3,
+          "first_relevant_rank": 1,
+          "reciprocal_rank": 1.0,
+          "first_relevant_score": 0.61534595,
+          "tenant_isolation_violations": 0,
+          "relevant_ranks": [
+            1
+          ],
+          "ndcg_at_k": 1.0,
+          "latency_ms": 17.814,
+          "ranking": [
+            {
+              "rank": 1,
+              "document_id": "shipping-policy",
+              "section_title": "物流延迟",
+              "final_score": 0.61534595,
+              "retrieval_score": null
+            },
+            {
+              "rank": 2,
+              "document_id": "shipping-policy",
+              "section_title": "订单状态说明",
+              "final_score": 0.54873335,
+              "retrieval_score": null
+            },
+            {
+              "rank": 3,
+              "document_id": "shipping-policy",
+              "section_title": "物流轨迹",
+              "final_score": 0.44599122,
+              "retrieval_score": null
+            }
+          ]
+        },
+        {
+          "case_id": "shipping-delay-no-invention",
+          "passed": true,
+          "expect_empty": false,
+          "returned_count": 3,
+          "first_relevant_rank": 1,
+          "reciprocal_rank": 1.0,
+          "first_relevant_score": 0.6946014,
+          "tenant_isolation_violations": 0,
+          "relevant_ranks": [
+            1
+          ],
+          "ndcg_at_k": 1.0,
+          "latency_ms": 74.275,
+          "ranking": [
+            {
+              "rank": 1,
+              "document_id": "shipping-policy",
+              "section_title": "物流延迟",
+              "final_score": 0.6946014,
+              "retrieval_score": null
+            },
+            {
+              "rank": 2,
+              "document_id": "shipping-policy",
+              "section_title": "物流轨迹",
+              "final_score": 0.6080302,
+              "retrieval_score": null
+            },
+            {
+              "rank": 3,
+              "document_id": "shipping-policy",
+              "section_title": "订单状态说明",
+              "final_score": 0.5440776,
+              "retrieval_score": null
+            }
+          ]
+        },
+        {
+          "case_id": "shipping-delay-carrier-check",
+          "passed": true,
+          "expect_empty": false,
+          "returned_count": 3,
+          "first_relevant_rank": 1,
+          "reciprocal_rank": 1.0,
+          "first_relevant_score": 0.6146587,
+          "tenant_isolation_violations": 0,
+          "relevant_ranks": [
+            1
+          ],
+          "ndcg_at_k": 1.0,
+          "latency_ms": 17.758,
+          "ranking": [
+            {
+              "rank": 1,
+              "document_id": "shipping-policy",
+              "section_title": "物流延迟",
+              "final_score": 0.6146587,
+              "retrieval_score": null
+            },
+            {
+              "rank": 2,
+              "document_id": "shipping-policy",
+              "section_title": "订单状态说明",
+              "final_score": 0.6037798,
+              "retrieval_score": null
+            },
+            {
+              "rank": 3,
+              "document_id": "shipping-policy",
+              "section_title": "物流轨迹",
+              "final_score": 0.5444418,
+              "retrieval_score": null
+            }
+          ]
+        },
+        {
+          "case_id": "shipping-damaged-package",
+          "passed": true,
+          "expect_empty": false,
+          "returned_count": 3,
+          "first_relevant_rank": 1,
+          "reciprocal_rank": 1.0,
+          "first_relevant_score": 0.5251716,
+          "tenant_isolation_violations": 0,
+          "relevant_ranks": [
+            1
+          ],
+          "ndcg_at_k": 1.0,
+          "latency_ms": 59.118,
+          "ranking": [
+            {
+              "rank": 1,
+              "document_id": "shipping-policy",
+              "section_title": "包裹破损或缺失",
+              "final_score": 0.5251716,
+              "retrieval_score": null
+            },
+            {
+              "rank": 2,
+              "document_id": "refund-policy",
+              "section_title": "七天无理由退货",
+              "final_score": 0.37753245,
+              "retrieval_score": null
+            },
+            {
+              "rank": 3,
+              "document_id": "shipping-policy",
+              "section_title": "订单状态说明",
+              "final_score": 0.37339184,
+              "retrieval_score": null
+            }
+          ]
+        },
+        {
+          "case_id": "shipping-missing-item",
+          "passed": true,
+          "expect_empty": false,
+          "returned_count": 3,
+          "first_relevant_rank": 1,
+          "reciprocal_rank": 1.0,
+          "first_relevant_score": 0.58057374,
+          "tenant_isolation_violations": 0,
+          "relevant_ranks": [
+            1
+          ],
+          "ndcg_at_k": 1.0,
+          "latency_ms": 18.287,
+          "ranking": [
+            {
+              "rank": 1,
+              "document_id": "shipping-policy",
+              "section_title": "包裹破损或缺失",
+              "final_score": 0.58057374,
+              "retrieval_score": null
+            },
+            {
+              "rank": 2,
+              "document_id": "shipping-policy",
+              "section_title": "订单状态说明",
+              "final_score": 0.508275,
+              "retrieval_score": null
+            },
+            {
+              "rank": 3,
+              "document_id": "refund-policy",
+              "section_title": "七天无理由退货",
+              "final_score": 0.4391829,
+              "retrieval_score": null
+            }
+          ]
+        },
+        {
+          "case_id": "shipping-wrong-item",
+          "passed": true,
+          "expect_empty": false,
+          "returned_count": 3,
+          "first_relevant_rank": 1,
+          "reciprocal_rank": 1.0,
+          "first_relevant_score": 0.49046636,
+          "tenant_isolation_violations": 0,
+          "relevant_ranks": [
+            1
+          ],
+          "ndcg_at_k": 1.0,
+          "latency_ms": 58.548,
+          "ranking": [
+            {
+              "rank": 1,
+              "document_id": "shipping-policy",
+              "section_title": "包裹破损或缺失",
+              "final_score": 0.49046636,
+              "retrieval_score": null
+            },
+            {
+              "rank": 2,
+              "document_id": "refund-policy",
+              "section_title": "已发货订单",
+              "final_score": 0.42736548,
+              "retrieval_score": null
+            },
+            {
+              "rank": 3,
+              "document_id": "shipping-policy",
+              "section_title": "订单状态说明",
+              "final_score": 0.41656157,
+              "retrieval_score": null
+            }
+          ]
+        },
+        {
+          "case_id": "unknown-tenant-refund-empty",
+          "passed": true,
+          "expect_empty": true,
+          "returned_count": 0,
+          "first_relevant_rank": null,
+          "reciprocal_rank": null,
+          "first_relevant_score": null,
+          "tenant_isolation_violations": 0,
+          "relevant_ranks": [],
+          "ndcg_at_k": null,
+          "latency_ms": 18.888,
+          "ranking": []
+        },
+        {
+          "case_id": "unknown-tenant-shipping-empty",
+          "passed": true,
+          "expect_empty": true,
+          "returned_count": 0,
+          "first_relevant_rank": null,
+          "reciprocal_rank": null,
+          "first_relevant_score": null,
+          "tenant_isolation_violations": 0,
+          "relevant_ranks": [],
+          "ndcg_at_k": null,
+          "latency_ms": 16.163,
+          "ranking": []
+        },
+        {
+          "case_id": "unknown-tenant-damage-empty",
+          "passed": true,
+          "expect_empty": true,
+          "returned_count": 0,
+          "first_relevant_rank": null,
+          "reciprocal_rank": null,
+          "first_relevant_score": null,
+          "tenant_isolation_violations": 0,
+          "relevant_ranks": [],
+          "ndcg_at_k": null,
+          "latency_ms": 16.527,
+          "ranking": []
+        }
+      ]
+    },
+    {
+      "name": "dense_bm25_rrf",
+      "summary": {
+        "top_k": 3,
+        "total_cases": 30,
+        "pass_rate": 0.9666666666666667,
+        "positive_cases": 27,
+        "hit_at_k": 0.9629629629629629,
+        "mean_reciprocal_rank": 0.8703703703703703,
+        "mean_ndcg": 0.8937381390211651,
+        "empty_cases": 3,
+        "empty_result_accuracy": 1.0,
+        "tenant_isolation_violations": 0
+      },
+      "latency_ms": {
+        "sample_count": 90,
+        "mean": 20.123,
+        "p95": 23.162,
+        "max": 70.183
+      },
+      "cases": [
+        {
+          "case_id": "refund-unshipped-cancel",
+          "passed": true,
+          "expect_empty": false,
+          "returned_count": 3,
+          "first_relevant_rank": 1,
+          "reciprocal_rank": 1.0,
+          "first_relevant_score": 0.5,
+          "tenant_isolation_violations": 0,
+          "relevant_ranks": [
+            1
+          ],
+          "ndcg_at_k": 1.0,
+          "latency_ms": 21.219,
+          "ranking": [
+            {
+              "rank": 1,
+              "document_id": "refund-policy",
+              "section_title": "未发货订单",
+              "final_score": 0.5,
+              "retrieval_score": null
+            },
+            {
+              "rank": 2,
+              "document_id": "refund-policy",
+              "section_title": "已发货订单",
+              "final_score": 0.33333334,
+              "retrieval_score": null
+            },
+            {
+              "rank": 3,
+              "document_id": "refund-policy",
+              "section_title": "退款资格说明",
+              "final_score": 0.25,
+              "retrieval_score": null
+            }
+          ]
+        },
+        {
+          "case_id": "refund-unshipped-original-payment",
+          "passed": true,
+          "expect_empty": false,
+          "returned_count": 3,
+          "first_relevant_rank": 1,
+          "reciprocal_rank": 1.0,
+          "first_relevant_score": 0.5,
+          "tenant_isolation_violations": 0,
+          "relevant_ranks": [
+            1
+          ],
+          "ndcg_at_k": 1.0,
+          "latency_ms": 20.105,
+          "ranking": [
+            {
+              "rank": 1,
+              "document_id": "refund-policy",
+              "section_title": "未发货订单",
+              "final_score": 0.5,
+              "retrieval_score": null
+            },
+            {
+              "rank": 2,
+              "document_id": "refund-policy",
+              "section_title": "已发货订单",
+              "final_score": 0.33333334,
+              "retrieval_score": null
+            },
+            {
+              "rank": 3,
+              "document_id": "refund-policy",
+              "section_title": "退款资格说明",
+              "final_score": 0.25,
+              "retrieval_score": null
+            }
+          ]
+        },
+        {
+          "case_id": "refund-paid-not-shipped",
+          "passed": true,
+          "expect_empty": false,
+          "returned_count": 3,
+          "first_relevant_rank": 1,
+          "reciprocal_rank": 1.0,
+          "first_relevant_score": 0.5,
+          "tenant_isolation_violations": 0,
+          "relevant_ranks": [
+            1
+          ],
+          "ndcg_at_k": 1.0,
+          "latency_ms": 19.976,
+          "ranking": [
+            {
+              "rank": 1,
+              "document_id": "refund-policy",
+              "section_title": "未发货订单",
+              "final_score": 0.5,
+              "retrieval_score": null
+            },
+            {
+              "rank": 2,
+              "document_id": "refund-policy",
+              "section_title": "已发货订单",
+              "final_score": 0.33333334,
+              "retrieval_score": null
+            },
+            {
+              "rank": 3,
+              "document_id": "shipping-policy",
+              "section_title": "订单状态说明",
+              "final_score": 0.25,
+              "retrieval_score": null
+            }
+          ]
+        },
+        {
+          "case_id": "refund-shipped-no-direct-cancel",
+          "passed": true,
+          "expect_empty": false,
+          "returned_count": 3,
+          "first_relevant_rank": 3,
+          "reciprocal_rank": 0.3333333333333333,
+          "first_relevant_score": 0.25,
+          "tenant_isolation_violations": 0,
+          "relevant_ranks": [
+            3
+          ],
+          "ndcg_at_k": 0.5,
+          "latency_ms": 19.571,
+          "ranking": [
+            {
+              "rank": 1,
+              "document_id": "refund-policy",
+              "section_title": "未发货订单",
+              "final_score": 0.5,
+              "retrieval_score": null
+            },
+            {
+              "rank": 2,
+              "document_id": "shipping-policy",
+              "section_title": "订单状态说明",
+              "final_score": 0.33333334,
+              "retrieval_score": null
+            },
+            {
+              "rank": 3,
+              "document_id": "refund-policy",
+              "section_title": "已发货订单",
+              "final_score": 0.25,
+              "retrieval_score": null
+            }
+          ]
+        },
+        {
+          "case_id": "refund-shipped-return-after-receipt",
+          "passed": true,
+          "expect_empty": false,
+          "returned_count": 3,
+          "first_relevant_rank": 3,
+          "reciprocal_rank": 0.3333333333333333,
+          "first_relevant_score": 0.25,
+          "tenant_isolation_violations": 0,
+          "relevant_ranks": [
+            3
+          ],
+          "ndcg_at_k": 0.5,
+          "latency_ms": 19.85,
+          "ranking": [
+            {
+              "rank": 1,
+              "document_id": "refund-policy",
+              "section_title": "未发货订单",
+              "final_score": 0.5,
+              "retrieval_score": null
+            },
+            {
+              "rank": 2,
+              "document_id": "refund-policy",
+              "section_title": "退款资格说明",
+              "final_score": 0.33333334,
+              "retrieval_score": null
+            },
+            {
+              "rank": 3,
+              "document_id": "refund-policy",
+              "section_title": "已发货订单",
+              "final_score": 0.25,
+              "retrieval_score": null
+            }
+          ]
+        },
+        {
+          "case_id": "refund-shipping-interception",
+          "passed": false,
+          "expect_empty": false,
+          "returned_count": 3,
+          "first_relevant_rank": null,
+          "reciprocal_rank": 0.0,
+          "first_relevant_score": null,
+          "tenant_isolation_violations": 0,
+          "relevant_ranks": [],
+          "ndcg_at_k": 0.0,
+          "latency_ms": 19.398,
+          "ranking": [
+            {
+              "rank": 1,
+              "document_id": "shipping-policy",
+              "section_title": "订单状态说明",
+              "final_score": 0.5,
+              "retrieval_score": null
+            },
+            {
+              "rank": 2,
+              "document_id": "shipping-policy",
+              "section_title": "物流轨迹",
+              "final_score": 0.33333334,
+              "retrieval_score": null
+            },
+            {
+              "rank": 3,
+              "document_id": "shipping-policy",
+              "section_title": "物流延迟",
+              "final_score": 0.25,
+              "retrieval_score": null
+            }
+          ]
+        },
+        {
+          "case_id": "refund-opened-software",
+          "passed": true,
+          "expect_empty": false,
+          "returned_count": 3,
+          "first_relevant_rank": 3,
+          "reciprocal_rank": 0.3333333333333333,
+          "first_relevant_score": 0.25,
+          "tenant_isolation_violations": 0,
+          "relevant_ranks": [
+            3
+          ],
+          "ndcg_at_k": 0.5,
+          "latency_ms": 20.022,
+          "ranking": [
+            {
+              "rank": 1,
+              "document_id": "refund-policy",
+              "section_title": "退款资格说明",
+              "final_score": 0.5,
+              "retrieval_score": null
+            },
+            {
+              "rank": 2,
+              "document_id": "refund-policy",
+              "section_title": "未发货订单",
+              "final_score": 0.33333334,
+              "retrieval_score": null
+            },
+            {
+              "rank": 3,
+              "document_id": "refund-policy",
+              "section_title": "七天无理由退货",
+              "final_score": 0.25,
+              "retrieval_score": null
+            }
+          ]
+        },
+        {
+          "case_id": "refund-activated-digital-product",
+          "passed": true,
+          "expect_empty": false,
+          "returned_count": 3,
+          "first_relevant_rank": 1,
+          "reciprocal_rank": 1.0,
+          "first_relevant_score": 0.5,
+          "tenant_isolation_violations": 0,
+          "relevant_ranks": [
+            1
+          ],
+          "ndcg_at_k": 1.0,
+          "latency_ms": 20.049,
+          "ranking": [
+            {
+              "rank": 1,
+              "document_id": "refund-policy",
+              "section_title": "七天无理由退货",
+              "final_score": 0.5,
+              "retrieval_score": null
+            },
+            {
+              "rank": 2,
+              "document_id": "refund-policy",
+              "section_title": "退款资格说明",
+              "final_score": 0.33333334,
+              "retrieval_score": null
+            },
+            {
+              "rank": 3,
+              "document_id": "refund-policy",
+              "section_title": "未发货订单",
+              "final_score": 0.25,
+              "retrieval_score": null
+            }
+          ]
+        },
+        {
+          "case_id": "refund-seven-day-condition",
+          "passed": true,
+          "expect_empty": false,
+          "returned_count": 3,
+          "first_relevant_rank": 1,
+          "reciprocal_rank": 1.0,
+          "first_relevant_score": 0.5,
+          "tenant_isolation_violations": 0,
+          "relevant_ranks": [
+            1
+          ],
+          "ndcg_at_k": 1.0,
+          "latency_ms": 20.531,
+          "ranking": [
+            {
+              "rank": 1,
+              "document_id": "refund-policy",
+              "section_title": "七天无理由退货",
+              "final_score": 0.5,
+              "retrieval_score": null
+            },
+            {
+              "rank": 2,
+              "document_id": "refund-policy",
+              "section_title": "退款资格说明",
+              "final_score": 0.33333334,
+              "retrieval_score": null
+            },
+            {
+              "rank": 3,
+              "document_id": "refund-policy",
+              "section_title": "未发货订单",
+              "final_score": 0.25,
+              "retrieval_score": null
+            }
+          ]
+        },
+        {
+          "case_id": "refund-quality-shipping-fee",
+          "passed": true,
+          "expect_empty": false,
+          "returned_count": 3,
+          "first_relevant_rank": 1,
+          "reciprocal_rank": 1.0,
+          "first_relevant_score": 0.5,
+          "tenant_isolation_violations": 0,
+          "relevant_ranks": [
+            1
+          ],
+          "ndcg_at_k": 1.0,
+          "latency_ms": 22.553,
+          "ranking": [
+            {
+              "rank": 1,
+              "document_id": "refund-policy",
+              "section_title": "质量问题",
+              "final_score": 0.5,
+              "retrieval_score": null
+            },
+            {
+              "rank": 2,
+              "document_id": "refund-policy",
+              "section_title": "退款资格说明",
+              "final_score": 0.33333334,
+              "retrieval_score": null
+            },
+            {
+              "rank": 3,
+              "document_id": "refund-policy",
+              "section_title": "未发货订单",
+              "final_score": 0.25,
+              "retrieval_score": null
+            }
+          ]
+        },
+        {
+          "case_id": "refund-quality-evidence",
+          "passed": true,
+          "expect_empty": false,
+          "returned_count": 3,
+          "first_relevant_rank": 1,
+          "reciprocal_rank": 1.0,
+          "first_relevant_score": 0.5,
+          "tenant_isolation_violations": 0,
+          "relevant_ranks": [
+            1
+          ],
+          "ndcg_at_k": 1.0,
+          "latency_ms": 20.522,
+          "ranking": [
+            {
+              "rank": 1,
+              "document_id": "refund-policy",
+              "section_title": "质量问题",
+              "final_score": 0.5,
+              "retrieval_score": null
+            },
+            {
+              "rank": 2,
+              "document_id": "shipping-policy",
+              "section_title": "包裹破损或缺失",
+              "final_score": 0.33333334,
+              "retrieval_score": null
+            },
+            {
+              "rank": 3,
+              "document_id": "refund-policy",
+              "section_title": "七天无理由退货",
+              "final_score": 0.25,
+              "retrieval_score": null
+            }
+          ]
+        },
+        {
+          "case_id": "refund-quality-review",
+          "passed": true,
+          "expect_empty": false,
+          "returned_count": 3,
+          "first_relevant_rank": 1,
+          "reciprocal_rank": 1.0,
+          "first_relevant_score": 0.5,
+          "tenant_isolation_violations": 0,
+          "relevant_ranks": [
+            1
+          ],
+          "ndcg_at_k": 1.0,
+          "latency_ms": 20.133,
+          "ranking": [
+            {
+              "rank": 1,
+              "document_id": "refund-policy",
+              "section_title": "质量问题",
+              "final_score": 0.5,
+              "retrieval_score": null
+            },
+            {
+              "rank": 2,
+              "document_id": "shipping-policy",
+              "section_title": "订单状态说明",
+              "final_score": 0.33333334,
+              "retrieval_score": null
+            },
+            {
+              "rank": 3,
+              "document_id": "refund-policy",
+              "section_title": "已发货订单",
+              "final_score": 0.25,
+              "retrieval_score": null
+            }
+          ]
+        },
+        {
+          "case_id": "refund-flag-not-completed",
+          "passed": true,
+          "expect_empty": false,
+          "returned_count": 3,
+          "first_relevant_rank": 1,
+          "reciprocal_rank": 1.0,
+          "first_relevant_score": 1.0,
+          "tenant_isolation_violations": 0,
+          "relevant_ranks": [
+            1
+          ],
+          "ndcg_at_k": 1.0,
+          "latency_ms": 20.502,
+          "ranking": [
+            {
+              "rank": 1,
+              "document_id": "refund-policy",
+              "section_title": "退款资格说明",
+              "final_score": 1.0,
+              "retrieval_score": null
+            },
+            {
+              "rank": 2,
+              "document_id": "refund-policy",
+              "section_title": "未发货订单",
+              "final_score": 0.33333334,
+              "retrieval_score": null
+            },
+            {
+              "rank": 3,
+              "document_id": "refund-policy",
+              "section_title": "已发货订单",
+              "final_score": 0.25,
+              "retrieval_score": null
+            }
+          ]
+        },
+        {
+          "case_id": "refund-flag-not-guaranteed",
+          "passed": true,
+          "expect_empty": false,
+          "returned_count": 3,
+          "first_relevant_rank": 1,
+          "reciprocal_rank": 1.0,
+          "first_relevant_score": 0.5,
+          "tenant_isolation_violations": 0,
+          "relevant_ranks": [
+            1
+          ],
+          "ndcg_at_k": 1.0,
+          "latency_ms": 18.745,
+          "ranking": [
+            {
+              "rank": 1,
+              "document_id": "refund-policy",
+              "section_title": "退款资格说明",
+              "final_score": 0.5,
+              "retrieval_score": null
+            },
+            {
+              "rank": 2,
+              "document_id": "refund-policy",
+              "section_title": "未发货订单",
+              "final_score": 0.33333334,
+              "retrieval_score": null
+            },
+            {
+              "rank": 3,
+              "document_id": "refund-policy",
+              "section_title": "已发货订单",
+              "final_score": 0.25,
+              "retrieval_score": null
+            }
+          ]
+        },
+        {
+          "case_id": "refund-final-review-result",
+          "passed": true,
+          "expect_empty": false,
+          "returned_count": 3,
+          "first_relevant_rank": 1,
+          "reciprocal_rank": 1.0,
+          "first_relevant_score": 0.5,
+          "tenant_isolation_violations": 0,
+          "relevant_ranks": [
+            1
+          ],
+          "ndcg_at_k": 1.0,
+          "latency_ms": 21.656,
+          "ranking": [
+            {
+              "rank": 1,
+              "document_id": "refund-policy",
+              "section_title": "退款资格说明",
+              "final_score": 0.5,
+              "retrieval_score": null
+            },
+            {
+              "rank": 2,
+              "document_id": "refund-policy",
+              "section_title": "未发货订单",
+              "final_score": 0.33333334,
+              "retrieval_score": null
+            },
+            {
+              "rank": 3,
+              "document_id": "refund-policy",
+              "section_title": "已发货订单",
+              "final_score": 0.25,
+              "retrieval_score": null
+            }
+          ]
+        },
+        {
+          "case_id": "shipping-status-unshipped",
+          "passed": true,
+          "expect_empty": false,
+          "returned_count": 3,
+          "first_relevant_rank": 1,
+          "reciprocal_rank": 1.0,
+          "first_relevant_score": 0.5,
+          "tenant_isolation_violations": 0,
+          "relevant_ranks": [
+            1
+          ],
+          "ndcg_at_k": 1.0,
+          "latency_ms": 25.349,
+          "ranking": [
+            {
+              "rank": 1,
+              "document_id": "shipping-policy",
+              "section_title": "订单状态说明",
+              "final_score": 0.5,
+              "retrieval_score": null
+            },
+            {
+              "rank": 2,
+              "document_id": "refund-policy",
+              "section_title": "未发货订单",
+              "final_score": 0.33333334,
+              "retrieval_score": null
+            },
+            {
+              "rank": 3,
+              "document_id": "refund-policy",
+              "section_title": "已发货订单",
+              "final_score": 0.25,
+              "retrieval_score": null
+            }
+          ]
+        },
+        {
+          "case_id": "shipping-status-shipped",
+          "passed": true,
+          "expect_empty": false,
+          "returned_count": 3,
+          "first_relevant_rank": 1,
+          "reciprocal_rank": 1.0,
+          "first_relevant_score": 0.5,
+          "tenant_isolation_violations": 0,
+          "relevant_ranks": [
+            1
+          ],
+          "ndcg_at_k": 1.0,
+          "latency_ms": 23.162,
+          "ranking": [
+            {
+              "rank": 1,
+              "document_id": "shipping-policy",
+              "section_title": "订单状态说明",
+              "final_score": 0.5,
+              "retrieval_score": null
+            },
+            {
+              "rank": 2,
+              "document_id": "shipping-policy",
+              "section_title": "物流轨迹",
+              "final_score": 0.33333334,
+              "retrieval_score": null
+            },
+            {
+              "rank": 3,
+              "document_id": "refund-policy",
+              "section_title": "已发货订单",
+              "final_score": 0.25,
+              "retrieval_score": null
+            }
+          ]
+        },
+        {
+          "case_id": "shipping-status-completed",
+          "passed": true,
+          "expect_empty": false,
+          "returned_count": 3,
+          "first_relevant_rank": 1,
+          "reciprocal_rank": 1.0,
+          "first_relevant_score": 0.5,
+          "tenant_isolation_violations": 0,
+          "relevant_ranks": [
+            1
+          ],
+          "ndcg_at_k": 1.0,
+          "latency_ms": 21.65,
+          "ranking": [
+            {
+              "rank": 1,
+              "document_id": "shipping-policy",
+              "section_title": "订单状态说明",
+              "final_score": 0.5,
+              "retrieval_score": null
+            },
+            {
+              "rank": 2,
+              "document_id": "shipping-policy",
+              "section_title": "物流轨迹",
+              "final_score": 0.33333334,
+              "retrieval_score": null
+            },
+            {
+              "rank": 3,
+              "document_id": "refund-policy",
+              "section_title": "已发货订单",
+              "final_score": 0.25,
+              "retrieval_score": null
+            }
+          ]
+        },
+        {
+          "case_id": "shipping-live-location",
+          "passed": true,
+          "expect_empty": false,
+          "returned_count": 3,
+          "first_relevant_rank": 1,
+          "reciprocal_rank": 1.0,
+          "first_relevant_score": 0.5,
+          "tenant_isolation_violations": 0,
+          "relevant_ranks": [
+            1
+          ],
+          "ndcg_at_k": 1.0,
+          "latency_ms": 23.942,
+          "ranking": [
+            {
+              "rank": 1,
+              "document_id": "shipping-policy",
+              "section_title": "物流轨迹",
+              "final_score": 0.5,
+              "retrieval_score": null
+            },
+            {
+              "rank": 2,
+              "document_id": "shipping-policy",
+              "section_title": "物流延迟",
+              "final_score": 0.33333334,
+              "retrieval_score": null
+            },
+            {
+              "rank": 3,
+              "document_id": "shipping-policy",
+              "section_title": "订单状态说明",
+              "final_score": 0.25,
+              "retrieval_score": null
+            }
+          ]
+        },
+        {
+          "case_id": "shipping-estimated-arrival",
+          "passed": true,
+          "expect_empty": false,
+          "returned_count": 3,
+          "first_relevant_rank": 2,
+          "reciprocal_rank": 0.5,
+          "first_relevant_score": 0.33333334,
+          "tenant_isolation_violations": 0,
+          "relevant_ranks": [
+            2
+          ],
+          "ndcg_at_k": 0.6309297535714575,
+          "latency_ms": 20.333,
+          "ranking": [
+            {
+              "rank": 1,
+              "document_id": "shipping-policy",
+              "section_title": "订单状态说明",
+              "final_score": 0.5,
+              "retrieval_score": null
+            },
+            {
+              "rank": 2,
+              "document_id": "shipping-policy",
+              "section_title": "物流轨迹",
+              "final_score": 0.33333334,
+              "retrieval_score": null
+            },
+            {
+              "rank": 3,
+              "document_id": "shipping-policy",
+              "section_title": "物流延迟",
+              "final_score": 0.25,
+              "retrieval_score": null
+            }
+          ]
+        },
+        {
+          "case_id": "shipping-carrier-tracking",
+          "passed": true,
+          "expect_empty": false,
+          "returned_count": 3,
+          "first_relevant_rank": 1,
+          "reciprocal_rank": 1.0,
+          "first_relevant_score": 0.5,
+          "tenant_isolation_violations": 0,
+          "relevant_ranks": [
+            1
+          ],
+          "ndcg_at_k": 1.0,
+          "latency_ms": 22.307,
+          "ranking": [
+            {
+              "rank": 1,
+              "document_id": "shipping-policy",
+              "section_title": "物流轨迹",
+              "final_score": 0.5,
+              "retrieval_score": null
+            },
+            {
+              "rank": 2,
+              "document_id": "shipping-policy",
+              "section_title": "物流延迟",
+              "final_score": 0.33333334,
+              "retrieval_score": null
+            },
+            {
+              "rank": 3,
+              "document_id": "shipping-policy",
+              "section_title": "订单状态说明",
+              "final_score": 0.25,
+              "retrieval_score": null
+            }
+          ]
+        },
+        {
+          "case_id": "shipping-delay",
+          "passed": true,
+          "expect_empty": false,
+          "returned_count": 3,
+          "first_relevant_rank": 1,
+          "reciprocal_rank": 1.0,
+          "first_relevant_score": 0.5,
+          "tenant_isolation_violations": 0,
+          "relevant_ranks": [
+            1
+          ],
+          "ndcg_at_k": 1.0,
+          "latency_ms": 22.401,
+          "ranking": [
+            {
+              "rank": 1,
+              "document_id": "shipping-policy",
+              "section_title": "物流延迟",
+              "final_score": 0.5,
+              "retrieval_score": null
+            },
+            {
+              "rank": 2,
+              "document_id": "shipping-policy",
+              "section_title": "订单状态说明",
+              "final_score": 0.33333334,
+              "retrieval_score": null
+            },
+            {
+              "rank": 3,
+              "document_id": "shipping-policy",
+              "section_title": "物流轨迹",
+              "final_score": 0.25,
+              "retrieval_score": null
+            }
+          ]
+        },
+        {
+          "case_id": "shipping-delay-no-invention",
+          "passed": true,
+          "expect_empty": false,
+          "returned_count": 3,
+          "first_relevant_rank": 1,
+          "reciprocal_rank": 1.0,
+          "first_relevant_score": 0.5,
+          "tenant_isolation_violations": 0,
+          "relevant_ranks": [
+            1
+          ],
+          "ndcg_at_k": 1.0,
+          "latency_ms": 21.003,
+          "ranking": [
+            {
+              "rank": 1,
+              "document_id": "shipping-policy",
+              "section_title": "物流延迟",
+              "final_score": 0.5,
+              "retrieval_score": null
+            },
+            {
+              "rank": 2,
+              "document_id": "shipping-policy",
+              "section_title": "物流轨迹",
+              "final_score": 0.33333334,
+              "retrieval_score": null
+            },
+            {
+              "rank": 3,
+              "document_id": "shipping-policy",
+              "section_title": "订单状态说明",
+              "final_score": 0.25,
+              "retrieval_score": null
+            }
+          ]
+        },
+        {
+          "case_id": "shipping-delay-carrier-check",
+          "passed": true,
+          "expect_empty": false,
+          "returned_count": 3,
+          "first_relevant_rank": 1,
+          "reciprocal_rank": 1.0,
+          "first_relevant_score": 0.5,
+          "tenant_isolation_violations": 0,
+          "relevant_ranks": [
+            1
+          ],
+          "ndcg_at_k": 1.0,
+          "latency_ms": 17.707,
+          "ranking": [
+            {
+              "rank": 1,
+              "document_id": "shipping-policy",
+              "section_title": "物流延迟",
+              "final_score": 0.5,
+              "retrieval_score": null
+            },
+            {
+              "rank": 2,
+              "document_id": "shipping-policy",
+              "section_title": "订单状态说明",
+              "final_score": 0.33333334,
+              "retrieval_score": null
+            },
+            {
+              "rank": 3,
+              "document_id": "shipping-policy",
+              "section_title": "物流轨迹",
+              "final_score": 0.25,
+              "retrieval_score": null
+            }
+          ]
+        },
+        {
+          "case_id": "shipping-damaged-package",
+          "passed": true,
+          "expect_empty": false,
+          "returned_count": 3,
+          "first_relevant_rank": 1,
+          "reciprocal_rank": 1.0,
+          "first_relevant_score": 0.5,
+          "tenant_isolation_violations": 0,
+          "relevant_ranks": [
+            1
+          ],
+          "ndcg_at_k": 1.0,
+          "latency_ms": 18.17,
+          "ranking": [
+            {
+              "rank": 1,
+              "document_id": "shipping-policy",
+              "section_title": "包裹破损或缺失",
+              "final_score": 0.5,
+              "retrieval_score": null
+            },
+            {
+              "rank": 2,
+              "document_id": "refund-policy",
+              "section_title": "七天无理由退货",
+              "final_score": 0.33333334,
+              "retrieval_score": null
+            },
+            {
+              "rank": 3,
+              "document_id": "shipping-policy",
+              "section_title": "订单状态说明",
+              "final_score": 0.25,
+              "retrieval_score": null
+            }
+          ]
+        },
+        {
+          "case_id": "shipping-missing-item",
+          "passed": true,
+          "expect_empty": false,
+          "returned_count": 3,
+          "first_relevant_rank": 1,
+          "reciprocal_rank": 1.0,
+          "first_relevant_score": 0.5,
+          "tenant_isolation_violations": 0,
+          "relevant_ranks": [
+            1
+          ],
+          "ndcg_at_k": 1.0,
+          "latency_ms": 19.277,
+          "ranking": [
+            {
+              "rank": 1,
+              "document_id": "shipping-policy",
+              "section_title": "包裹破损或缺失",
+              "final_score": 0.5,
+              "retrieval_score": null
+            },
+            {
+              "rank": 2,
+              "document_id": "shipping-policy",
+              "section_title": "订单状态说明",
+              "final_score": 0.33333334,
+              "retrieval_score": null
+            },
+            {
+              "rank": 3,
+              "document_id": "refund-policy",
+              "section_title": "七天无理由退货",
+              "final_score": 0.25,
+              "retrieval_score": null
+            }
+          ]
+        },
+        {
+          "case_id": "shipping-wrong-item",
+          "passed": true,
+          "expect_empty": false,
+          "returned_count": 3,
+          "first_relevant_rank": 1,
+          "reciprocal_rank": 1.0,
+          "first_relevant_score": 0.5,
+          "tenant_isolation_violations": 0,
+          "relevant_ranks": [
+            1
+          ],
+          "ndcg_at_k": 1.0,
+          "latency_ms": 17.281,
+          "ranking": [
+            {
+              "rank": 1,
+              "document_id": "shipping-policy",
+              "section_title": "包裹破损或缺失",
+              "final_score": 0.5,
+              "retrieval_score": null
+            },
+            {
+              "rank": 2,
+              "document_id": "refund-policy",
+              "section_title": "已发货订单",
+              "final_score": 0.33333334,
+              "retrieval_score": null
+            },
+            {
+              "rank": 3,
+              "document_id": "shipping-policy",
+              "section_title": "订单状态说明",
+              "final_score": 0.25,
+              "retrieval_score": null
+            }
+          ]
+        },
+        {
+          "case_id": "unknown-tenant-refund-empty",
+          "passed": true,
+          "expect_empty": true,
+          "returned_count": 0,
+          "first_relevant_rank": null,
+          "reciprocal_rank": null,
+          "first_relevant_score": null,
+          "tenant_isolation_violations": 0,
+          "relevant_ranks": [],
+          "ndcg_at_k": null,
+          "latency_ms": 17.735,
+          "ranking": []
+        },
+        {
+          "case_id": "unknown-tenant-shipping-empty",
+          "passed": true,
+          "expect_empty": true,
+          "returned_count": 0,
+          "first_relevant_rank": null,
+          "reciprocal_rank": null,
+          "first_relevant_score": null,
+          "tenant_isolation_violations": 0,
+          "relevant_ranks": [],
+          "ndcg_at_k": null,
+          "latency_ms": 18.624,
+          "ranking": []
+        },
+        {
+          "case_id": "unknown-tenant-damage-empty",
+          "passed": true,
+          "expect_empty": true,
+          "returned_count": 0,
+          "first_relevant_rank": null,
+          "reciprocal_rank": null,
+          "first_relevant_score": null,
+          "tenant_isolation_violations": 0,
+          "relevant_ranks": [],
+          "ndcg_at_k": null,
+          "latency_ms": 18.823,
+          "ranking": []
+        }
+      ]
+    },
+    {
+      "name": "dense_bm25_rrf_cross_encoder",
+      "summary": {
+        "top_k": 3,
+        "total_cases": 30,
+        "pass_rate": 1.0,
+        "positive_cases": 27,
+        "hit_at_k": 1.0,
+        "mean_reciprocal_rank": 1.0,
+        "mean_ndcg": 1.0,
+        "empty_cases": 3,
+        "empty_result_accuracy": 1.0,
+        "tenant_isolation_violations": 0
+      },
+      "latency_ms": {
+        "sample_count": 90,
+        "mean": 313.436,
+        "p95": 370.387,
+        "max": 392.11
+      },
+      "cases": [
+        {
+          "case_id": "refund-unshipped-cancel",
+          "passed": true,
+          "expect_empty": false,
+          "returned_count": 3,
+          "first_relevant_rank": 1,
+          "reciprocal_rank": 1.0,
+          "first_relevant_score": 5.659780502319336,
+          "tenant_isolation_violations": 0,
+          "relevant_ranks": [
+            1
+          ],
+          "ndcg_at_k": 1.0,
+          "latency_ms": 330.642,
+          "ranking": [
+            {
+              "rank": 1,
+              "document_id": "refund-policy",
+              "section_title": "未发货订单",
+              "final_score": 5.659780502319336,
+              "retrieval_score": 0.5
+            },
+            {
+              "rank": 2,
+              "document_id": "refund-policy",
+              "section_title": "已发货订单",
+              "final_score": 3.135632038116455,
+              "retrieval_score": 0.33333334
+            },
+            {
+              "rank": 3,
+              "document_id": "refund-policy",
+              "section_title": "退款资格说明",
+              "final_score": 0.297263503074646,
+              "retrieval_score": 0.25
+            }
+          ]
+        },
+        {
+          "case_id": "refund-unshipped-original-payment",
+          "passed": true,
+          "expect_empty": false,
+          "returned_count": 3,
+          "first_relevant_rank": 1,
+          "reciprocal_rank": 1.0,
+          "first_relevant_score": 2.5703792572021484,
+          "tenant_isolation_violations": 0,
+          "relevant_ranks": [
+            1
+          ],
+          "ndcg_at_k": 1.0,
+          "latency_ms": 337.65,
+          "ranking": [
+            {
+              "rank": 1,
+              "document_id": "refund-policy",
+              "section_title": "未发货订单",
+              "final_score": 2.5703792572021484,
+              "retrieval_score": 0.5
+            },
+            {
+              "rank": 2,
+              "document_id": "refund-policy",
+              "section_title": "已发货订单",
+              "final_score": -0.2581227719783783,
+              "retrieval_score": 0.33333334
+            },
+            {
+              "rank": 3,
+              "document_id": "refund-policy",
+              "section_title": "质量问题",
+              "final_score": -2.97393536567688,
+              "retrieval_score": 0.1
+            }
+          ]
+        },
+        {
+          "case_id": "refund-paid-not-shipped",
+          "passed": true,
+          "expect_empty": false,
+          "returned_count": 3,
+          "first_relevant_rank": 1,
+          "reciprocal_rank": 1.0,
+          "first_relevant_score": 5.77960205078125,
+          "tenant_isolation_violations": 0,
+          "relevant_ranks": [
+            1
+          ],
+          "ndcg_at_k": 1.0,
+          "latency_ms": 348.547,
+          "ranking": [
+            {
+              "rank": 1,
+              "document_id": "refund-policy",
+              "section_title": "未发货订单",
+              "final_score": 5.77960205078125,
+              "retrieval_score": 0.5
+            },
+            {
+              "rank": 2,
+              "document_id": "refund-policy",
+              "section_title": "已发货订单",
+              "final_score": 3.109602212905884,
+              "retrieval_score": 0.33333334
+            },
+            {
+              "rank": 3,
+              "document_id": "shipping-policy",
+              "section_title": "订单状态说明",
+              "final_score": -0.8177847862243652,
+              "retrieval_score": 0.25
+            }
+          ]
+        },
+        {
+          "case_id": "refund-shipped-no-direct-cancel",
+          "passed": true,
+          "expect_empty": false,
+          "returned_count": 3,
+          "first_relevant_rank": 1,
+          "reciprocal_rank": 1.0,
+          "first_relevant_score": 5.321197509765625,
+          "tenant_isolation_violations": 0,
+          "relevant_ranks": [
+            1
+          ],
+          "ndcg_at_k": 1.0,
+          "latency_ms": 387.923,
+          "ranking": [
+            {
+              "rank": 1,
+              "document_id": "refund-policy",
+              "section_title": "已发货订单",
+              "final_score": 5.321197509765625,
+              "retrieval_score": 0.25
+            },
+            {
+              "rank": 2,
+              "document_id": "refund-policy",
+              "section_title": "未发货订单",
+              "final_score": 3.3839402198791504,
+              "retrieval_score": 0.5
+            },
+            {
+              "rank": 3,
+              "document_id": "refund-policy",
+              "section_title": "退款资格说明",
+              "final_score": -1.4737287759780884,
+              "retrieval_score": 0.14285715
+            }
+          ]
+        },
+        {
+          "case_id": "refund-shipped-return-after-receipt",
+          "passed": true,
+          "expect_empty": false,
+          "returned_count": 3,
+          "first_relevant_rank": 1,
+          "reciprocal_rank": 1.0,
+          "first_relevant_score": 2.1441125869750977,
+          "tenant_isolation_violations": 0,
+          "relevant_ranks": [
+            1
+          ],
+          "ndcg_at_k": 1.0,
+          "latency_ms": 345.737,
+          "ranking": [
+            {
+              "rank": 1,
+              "document_id": "refund-policy",
+              "section_title": "已发货订单",
+              "final_score": 2.1441125869750977,
+              "retrieval_score": 0.25
+            },
+            {
+              "rank": 2,
+              "document_id": "shipping-policy",
+              "section_title": "物流延迟",
+              "final_score": -1.3767653703689575,
+              "retrieval_score": 0.16666667
+            },
+            {
+              "rank": 3,
+              "document_id": "refund-policy",
+              "section_title": "未发货订单",
+              "final_score": -1.4338948726654053,
+              "retrieval_score": 0.5
+            }
+          ]
+        },
+        {
+          "case_id": "refund-shipping-interception",
+          "passed": true,
+          "expect_empty": false,
+          "returned_count": 3,
+          "first_relevant_rank": 1,
+          "reciprocal_rank": 1.0,
+          "first_relevant_score": 4.213335037231445,
+          "tenant_isolation_violations": 0,
+          "relevant_ranks": [
+            1
+          ],
+          "ndcg_at_k": 1.0,
+          "latency_ms": 344.742,
+          "ranking": [
+            {
+              "rank": 1,
+              "document_id": "refund-policy",
+              "section_title": "已发货订单",
+              "final_score": 4.213335037231445,
+              "retrieval_score": 0.2
+            },
+            {
+              "rank": 2,
+              "document_id": "shipping-policy",
+              "section_title": "物流轨迹",
+              "final_score": -2.616183280944824,
+              "retrieval_score": 0.33333334
+            },
+            {
+              "rank": 3,
+              "document_id": "shipping-policy",
+              "section_title": "订单状态说明",
+              "final_score": -3.2018957138061523,
+              "retrieval_score": 0.5
+            }
+          ]
+        },
+        {
+          "case_id": "refund-opened-software",
+          "passed": true,
+          "expect_empty": false,
+          "returned_count": 3,
+          "first_relevant_rank": 1,
+          "reciprocal_rank": 1.0,
+          "first_relevant_score": 6.392460823059082,
+          "tenant_isolation_violations": 0,
+          "relevant_ranks": [
+            1
+          ],
+          "ndcg_at_k": 1.0,
+          "latency_ms": 342.896,
+          "ranking": [
+            {
+              "rank": 1,
+              "document_id": "refund-policy",
+              "section_title": "七天无理由退货",
+              "final_score": 6.392460823059082,
+              "retrieval_score": 0.25
+            },
+            {
+              "rank": 2,
+              "document_id": "refund-policy",
+              "section_title": "退款资格说明",
+              "final_score": -4.969967365264893,
+              "retrieval_score": 0.5
+            },
+            {
+              "rank": 3,
+              "document_id": "refund-policy",
+              "section_title": "已发货订单",
+              "final_score": -5.274477005004883,
+              "retrieval_score": 0.16666667
+            }
+          ]
+        },
+        {
+          "case_id": "refund-activated-digital-product",
+          "passed": true,
+          "expect_empty": false,
+          "returned_count": 3,
+          "first_relevant_rank": 1,
+          "reciprocal_rank": 1.0,
+          "first_relevant_score": 6.9865922927856445,
+          "tenant_isolation_violations": 0,
+          "relevant_ranks": [
+            1
+          ],
+          "ndcg_at_k": 1.0,
+          "latency_ms": 342.482,
+          "ranking": [
+            {
+              "rank": 1,
+              "document_id": "refund-policy",
+              "section_title": "七天无理由退货",
+              "final_score": 6.9865922927856445,
+              "retrieval_score": 0.5
+            },
+            {
+              "rank": 2,
+              "document_id": "refund-policy",
+              "section_title": "已发货订单",
+              "final_score": -3.476541042327881,
+              "retrieval_score": 0.2
+            },
+            {
+              "rank": 3,
+              "document_id": "shipping-policy",
+              "section_title": "物流延迟",
+              "final_score": -3.740344524383545,
+              "retrieval_score": 0.16666667
+            }
+          ]
+        },
+        {
+          "case_id": "refund-seven-day-condition",
+          "passed": true,
+          "expect_empty": false,
+          "returned_count": 3,
+          "first_relevant_rank": 1,
+          "reciprocal_rank": 1.0,
+          "first_relevant_score": 6.411713600158691,
+          "tenant_isolation_violations": 0,
+          "relevant_ranks": [
+            1
+          ],
+          "ndcg_at_k": 1.0,
+          "latency_ms": 357.893,
+          "ranking": [
+            {
+              "rank": 1,
+              "document_id": "refund-policy",
+              "section_title": "七天无理由退货",
+              "final_score": 6.411713600158691,
+              "retrieval_score": 0.5
+            },
+            {
+              "rank": 2,
+              "document_id": "shipping-policy",
+              "section_title": "物流轨迹",
+              "final_score": -1.8991378545761108,
+              "retrieval_score": 0.1
+            },
+            {
+              "rank": 3,
+              "document_id": "refund-policy",
+              "section_title": "已发货订单",
+              "final_score": -1.9218945503234863,
+              "retrieval_score": 0.2
+            }
+          ]
+        },
+        {
+          "case_id": "refund-quality-shipping-fee",
+          "passed": true,
+          "expect_empty": false,
+          "returned_count": 3,
+          "first_relevant_rank": 1,
+          "reciprocal_rank": 1.0,
+          "first_relevant_score": 6.824914932250977,
+          "tenant_isolation_violations": 0,
+          "relevant_ranks": [
+            1
+          ],
+          "ndcg_at_k": 1.0,
+          "latency_ms": 340.847,
+          "ranking": [
+            {
+              "rank": 1,
+              "document_id": "refund-policy",
+              "section_title": "质量问题",
+              "final_score": 6.824914932250977,
+              "retrieval_score": 0.5
+            },
+            {
+              "rank": 2,
+              "document_id": "refund-policy",
+              "section_title": "已发货订单",
+              "final_score": -3.7361879348754883,
+              "retrieval_score": 0.16666667
+            },
+            {
+              "rank": 3,
+              "document_id": "shipping-policy",
+              "section_title": "物流延迟",
+              "final_score": -4.085936546325684,
+              "retrieval_score": 0.1
+            }
+          ]
+        },
+        {
+          "case_id": "refund-quality-evidence",
+          "passed": true,
+          "expect_empty": false,
+          "returned_count": 3,
+          "first_relevant_rank": 1,
+          "reciprocal_rank": 1.0,
+          "first_relevant_score": 4.8797101974487305,
+          "tenant_isolation_violations": 0,
+          "relevant_ranks": [
+            1
+          ],
+          "ndcg_at_k": 1.0,
+          "latency_ms": 348.938,
+          "ranking": [
+            {
+              "rank": 1,
+              "document_id": "refund-policy",
+              "section_title": "质量问题",
+              "final_score": 4.8797101974487305,
+              "retrieval_score": 0.5
+            },
+            {
+              "rank": 2,
+              "document_id": "shipping-policy",
+              "section_title": "包裹破损或缺失",
+              "final_score": 3.12713360786438,
+              "retrieval_score": 0.33333334
+            },
+            {
+              "rank": 3,
+              "document_id": "shipping-policy",
+              "section_title": "物流延迟",
+              "final_score": -2.1579740047454834,
+              "retrieval_score": 0.11111111
+            }
+          ]
+        },
+        {
+          "case_id": "refund-quality-review",
+          "passed": true,
+          "expect_empty": false,
+          "returned_count": 3,
+          "first_relevant_rank": 1,
+          "reciprocal_rank": 1.0,
+          "first_relevant_score": 4.922677040100098,
+          "tenant_isolation_violations": 0,
+          "relevant_ranks": [
+            1
+          ],
+          "ndcg_at_k": 1.0,
+          "latency_ms": 355.534,
+          "ranking": [
+            {
+              "rank": 1,
+              "document_id": "refund-policy",
+              "section_title": "质量问题",
+              "final_score": 4.922677040100098,
+              "retrieval_score": 0.5
+            },
+            {
+              "rank": 2,
+              "document_id": "refund-policy",
+              "section_title": "七天无理由退货",
+              "final_score": -3.386540412902832,
+              "retrieval_score": 0.16666667
+            },
+            {
+              "rank": 3,
+              "document_id": "shipping-policy",
+              "section_title": "包裹破损或缺失",
+              "final_score": -4.315765380859375,
+              "retrieval_score": 0.125
+            }
+          ]
+        },
+        {
+          "case_id": "refund-flag-not-completed",
+          "passed": true,
+          "expect_empty": false,
+          "returned_count": 3,
+          "first_relevant_rank": 1,
+          "reciprocal_rank": 1.0,
+          "first_relevant_score": 7.661923408508301,
+          "tenant_isolation_violations": 0,
+          "relevant_ranks": [
+            1
+          ],
+          "ndcg_at_k": 1.0,
+          "latency_ms": 363.97,
+          "ranking": [
+            {
+              "rank": 1,
+              "document_id": "refund-policy",
+              "section_title": "退款资格说明",
+              "final_score": 7.661923408508301,
+              "retrieval_score": 1.0
+            },
+            {
+              "rank": 2,
+              "document_id": "shipping-policy",
+              "section_title": "物流轨迹",
+              "final_score": -0.812631368637085,
+              "retrieval_score": 0.11111111
+            },
+            {
+              "rank": 3,
+              "document_id": "shipping-policy",
+              "section_title": "订单状态说明",
+              "final_score": -1.0795314311981201,
+              "retrieval_score": 0.2
+            }
+          ]
+        },
+        {
+          "case_id": "refund-flag-not-guaranteed",
+          "passed": true,
+          "expect_empty": false,
+          "returned_count": 3,
+          "first_relevant_rank": 1,
+          "reciprocal_rank": 1.0,
+          "first_relevant_score": 7.966374397277832,
+          "tenant_isolation_violations": 0,
+          "relevant_ranks": [
+            1
+          ],
+          "ndcg_at_k": 1.0,
+          "latency_ms": 339.714,
+          "ranking": [
+            {
+              "rank": 1,
+              "document_id": "refund-policy",
+              "section_title": "退款资格说明",
+              "final_score": 7.966374397277832,
+              "retrieval_score": 0.5
+            },
+            {
+              "rank": 2,
+              "document_id": "refund-policy",
+              "section_title": "未发货订单",
+              "final_score": -4.402347087860107,
+              "retrieval_score": 0.33333334
+            },
+            {
+              "rank": 3,
+              "document_id": "refund-policy",
+              "section_title": "已发货订单",
+              "final_score": -4.512282371520996,
+              "retrieval_score": 0.25
+            }
+          ]
+        },
+        {
+          "case_id": "refund-final-review-result",
+          "passed": true,
+          "expect_empty": false,
+          "returned_count": 3,
+          "first_relevant_rank": 1,
+          "reciprocal_rank": 1.0,
+          "first_relevant_score": 1.1902410984039307,
+          "tenant_isolation_violations": 0,
+          "relevant_ranks": [
+            1
+          ],
+          "ndcg_at_k": 1.0,
+          "latency_ms": 349.133,
+          "ranking": [
+            {
+              "rank": 1,
+              "document_id": "refund-policy",
+              "section_title": "退款资格说明",
+              "final_score": 1.1902410984039307,
+              "retrieval_score": 0.5
+            },
+            {
+              "rank": 2,
+              "document_id": "refund-policy",
+              "section_title": "质量问题",
+              "final_score": -3.452479362487793,
+              "retrieval_score": 0.2
+            },
+            {
+              "rank": 3,
+              "document_id": "refund-policy",
+              "section_title": "已发货订单",
+              "final_score": -5.726047039031982,
+              "retrieval_score": 0.25
+            }
+          ]
+        },
+        {
+          "case_id": "shipping-status-unshipped",
+          "passed": true,
+          "expect_empty": false,
+          "returned_count": 3,
+          "first_relevant_rank": 1,
+          "reciprocal_rank": 1.0,
+          "first_relevant_score": 5.578369617462158,
+          "tenant_isolation_violations": 0,
+          "relevant_ranks": [
+            1
+          ],
+          "ndcg_at_k": 1.0,
+          "latency_ms": 330.392,
+          "ranking": [
+            {
+              "rank": 1,
+              "document_id": "shipping-policy",
+              "section_title": "订单状态说明",
+              "final_score": 5.578369617462158,
+              "retrieval_score": 0.5
+            },
+            {
+              "rank": 2,
+              "document_id": "shipping-policy",
+              "section_title": "物流轨迹",
+              "final_score": 2.5953125953674316,
+              "retrieval_score": 0.2
+            },
+            {
+              "rank": 3,
+              "document_id": "shipping-policy",
+              "section_title": "物流延迟",
+              "final_score": -0.12184730172157288,
+              "retrieval_score": 0.14285715
+            }
+          ]
+        },
+        {
+          "case_id": "shipping-status-shipped",
+          "passed": true,
+          "expect_empty": false,
+          "returned_count": 3,
+          "first_relevant_rank": 1,
+          "reciprocal_rank": 1.0,
+          "first_relevant_score": 5.412388801574707,
+          "tenant_isolation_violations": 0,
+          "relevant_ranks": [
+            1
+          ],
+          "ndcg_at_k": 1.0,
+          "latency_ms": 343.862,
+          "ranking": [
+            {
+              "rank": 1,
+              "document_id": "shipping-policy",
+              "section_title": "订单状态说明",
+              "final_score": 5.412388801574707,
+              "retrieval_score": 0.5
+            },
+            {
+              "rank": 2,
+              "document_id": "shipping-policy",
+              "section_title": "物流轨迹",
+              "final_score": 4.5087456703186035,
+              "retrieval_score": 0.33333334
+            },
+            {
+              "rank": 3,
+              "document_id": "refund-policy",
+              "section_title": "已发货订单",
+              "final_score": 0.22383944690227509,
+              "retrieval_score": 0.25
+            }
+          ]
+        },
+        {
+          "case_id": "shipping-status-completed",
+          "passed": true,
+          "expect_empty": false,
+          "returned_count": 3,
+          "first_relevant_rank": 1,
+          "reciprocal_rank": 1.0,
+          "first_relevant_score": 0.6873523592948914,
+          "tenant_isolation_violations": 0,
+          "relevant_ranks": [
+            1
+          ],
+          "ndcg_at_k": 1.0,
+          "latency_ms": 315.125,
+          "ranking": [
+            {
+              "rank": 1,
+              "document_id": "shipping-policy",
+              "section_title": "订单状态说明",
+              "final_score": 0.6873523592948914,
+              "retrieval_score": 0.5
+            },
+            {
+              "rank": 2,
+              "document_id": "shipping-policy",
+              "section_title": "物流轨迹",
+              "final_score": -1.2053472995758057,
+              "retrieval_score": 0.33333334
+            },
+            {
+              "rank": 3,
+              "document_id": "refund-policy",
+              "section_title": "退款资格说明",
+              "final_score": -2.2061874866485596,
+              "retrieval_score": 0.16666667
+            }
+          ]
+        },
+        {
+          "case_id": "shipping-live-location",
+          "passed": true,
+          "expect_empty": false,
+          "returned_count": 3,
+          "first_relevant_rank": 1,
+          "reciprocal_rank": 1.0,
+          "first_relevant_score": 7.233356475830078,
+          "tenant_isolation_violations": 0,
+          "relevant_ranks": [
+            1
+          ],
+          "ndcg_at_k": 1.0,
+          "latency_ms": 351.218,
+          "ranking": [
+            {
+              "rank": 1,
+              "document_id": "shipping-policy",
+              "section_title": "物流轨迹",
+              "final_score": 7.233356475830078,
+              "retrieval_score": 0.5
+            },
+            {
+              "rank": 2,
+              "document_id": "refund-policy",
+              "section_title": "已发货订单",
+              "final_score": 1.3157716989517212,
+              "retrieval_score": 0.2
+            },
+            {
+              "rank": 3,
+              "document_id": "shipping-policy",
+              "section_title": "订单状态说明",
+              "final_score": -0.10528837889432907,
+              "retrieval_score": 0.25
+            }
+          ]
+        },
+        {
+          "case_id": "shipping-estimated-arrival",
+          "passed": true,
+          "expect_empty": false,
+          "returned_count": 3,
+          "first_relevant_rank": 1,
+          "reciprocal_rank": 1.0,
+          "first_relevant_score": 5.531678199768066,
+          "tenant_isolation_violations": 0,
+          "relevant_ranks": [
+            1
+          ],
+          "ndcg_at_k": 1.0,
+          "latency_ms": 348.238,
+          "ranking": [
+            {
+              "rank": 1,
+              "document_id": "shipping-policy",
+              "section_title": "物流轨迹",
+              "final_score": 5.531678199768066,
+              "retrieval_score": 0.33333334
+            },
+            {
+              "rank": 2,
+              "document_id": "shipping-policy",
+              "section_title": "物流延迟",
+              "final_score": 0.47271671891212463,
+              "retrieval_score": 0.25
+            },
+            {
+              "rank": 3,
+              "document_id": "shipping-policy",
+              "section_title": "订单状态说明",
+              "final_score": 0.14078469574451447,
+              "retrieval_score": 0.5
+            }
+          ]
+        },
+        {
+          "case_id": "shipping-carrier-tracking",
+          "passed": true,
+          "expect_empty": false,
+          "returned_count": 3,
+          "first_relevant_rank": 1,
+          "reciprocal_rank": 1.0,
+          "first_relevant_score": 4.8303632736206055,
+          "tenant_isolation_violations": 0,
+          "relevant_ranks": [
+            1
+          ],
+          "ndcg_at_k": 1.0,
+          "latency_ms": 353.812,
+          "ranking": [
+            {
+              "rank": 1,
+              "document_id": "shipping-policy",
+              "section_title": "物流轨迹",
+              "final_score": 4.8303632736206055,
+              "retrieval_score": 0.5
+            },
+            {
+              "rank": 2,
+              "document_id": "shipping-policy",
+              "section_title": "物流延迟",
+              "final_score": -2.293121337890625,
+              "retrieval_score": 0.33333334
+            },
+            {
+              "rank": 3,
+              "document_id": "refund-policy",
+              "section_title": "质量问题",
+              "final_score": -5.665674209594727,
+              "retrieval_score": 0.2
+            }
+          ]
+        },
+        {
+          "case_id": "shipping-delay",
+          "passed": true,
+          "expect_empty": false,
+          "returned_count": 3,
+          "first_relevant_rank": 1,
+          "reciprocal_rank": 1.0,
+          "first_relevant_score": 6.228670120239258,
+          "tenant_isolation_violations": 0,
+          "relevant_ranks": [
+            1
+          ],
+          "ndcg_at_k": 1.0,
+          "latency_ms": 313.232,
+          "ranking": [
+            {
+              "rank": 1,
+              "document_id": "shipping-policy",
+              "section_title": "物流延迟",
+              "final_score": 6.228670120239258,
+              "retrieval_score": 0.5
+            },
+            {
+              "rank": 2,
+              "document_id": "refund-policy",
+              "section_title": "质量问题",
+              "final_score": -1.7238657474517822,
+              "retrieval_score": 0.1
+            },
+            {
+              "rank": 3,
+              "document_id": "refund-policy",
+              "section_title": "七天无理由退货",
+              "final_score": -2.4368464946746826,
+              "retrieval_score": 0.2
+            }
+          ]
+        },
+        {
+          "case_id": "shipping-delay-no-invention",
+          "passed": true,
+          "expect_empty": false,
+          "returned_count": 3,
+          "first_relevant_rank": 1,
+          "reciprocal_rank": 1.0,
+          "first_relevant_score": 5.767359733581543,
+          "tenant_isolation_violations": 0,
+          "relevant_ranks": [
+            1
+          ],
+          "ndcg_at_k": 1.0,
+          "latency_ms": 359.8,
+          "ranking": [
+            {
+              "rank": 1,
+              "document_id": "shipping-policy",
+              "section_title": "物流延迟",
+              "final_score": 5.767359733581543,
+              "retrieval_score": 0.5
+            },
+            {
+              "rank": 2,
+              "document_id": "shipping-policy",
+              "section_title": "物流轨迹",
+              "final_score": -2.534545660018921,
+              "retrieval_score": 0.33333334
+            },
+            {
+              "rank": 3,
+              "document_id": "refund-policy",
+              "section_title": "已发货订单",
+              "final_score": -5.186484336853027,
+              "retrieval_score": 0.2
+            }
+          ]
+        },
+        {
+          "case_id": "shipping-delay-carrier-check",
+          "passed": true,
+          "expect_empty": false,
+          "returned_count": 3,
+          "first_relevant_rank": 1,
+          "reciprocal_rank": 1.0,
+          "first_relevant_score": 5.209073066711426,
+          "tenant_isolation_violations": 0,
+          "relevant_ranks": [
+            1
+          ],
+          "ndcg_at_k": 1.0,
+          "latency_ms": 366.229,
+          "ranking": [
+            {
+              "rank": 1,
+              "document_id": "shipping-policy",
+              "section_title": "物流延迟",
+              "final_score": 5.209073066711426,
+              "retrieval_score": 0.5
+            },
+            {
+              "rank": 2,
+              "document_id": "shipping-policy",
+              "section_title": "订单状态说明",
+              "final_score": 0.7127760648727417,
+              "retrieval_score": 0.33333334
+            },
+            {
+              "rank": 3,
+              "document_id": "shipping-policy",
+              "section_title": "物流轨迹",
+              "final_score": -0.7641023993492126,
+              "retrieval_score": 0.25
+            }
+          ]
+        },
+        {
+          "case_id": "shipping-damaged-package",
+          "passed": true,
+          "expect_empty": false,
+          "returned_count": 3,
+          "first_relevant_rank": 1,
+          "reciprocal_rank": 1.0,
+          "first_relevant_score": 5.093587875366211,
+          "tenant_isolation_violations": 0,
+          "relevant_ranks": [
+            1
+          ],
+          "ndcg_at_k": 1.0,
+          "latency_ms": 347.998,
+          "ranking": [
+            {
+              "rank": 1,
+              "document_id": "shipping-policy",
+              "section_title": "包裹破损或缺失",
+              "final_score": 5.093587875366211,
+              "retrieval_score": 0.5
+            },
+            {
+              "rank": 2,
+              "document_id": "refund-policy",
+              "section_title": "质量问题",
+              "final_score": -2.109619617462158,
+              "retrieval_score": 0.16666667
+            },
+            {
+              "rank": 3,
+              "document_id": "refund-policy",
+              "section_title": "七天无理由退货",
+              "final_score": -2.538681745529175,
+              "retrieval_score": 0.33333334
+            }
+          ]
+        },
+        {
+          "case_id": "shipping-missing-item",
+          "passed": true,
+          "expect_empty": false,
+          "returned_count": 3,
+          "first_relevant_rank": 1,
+          "reciprocal_rank": 1.0,
+          "first_relevant_score": 5.265322685241699,
+          "tenant_isolation_violations": 0,
+          "relevant_ranks": [
+            1
+          ],
+          "ndcg_at_k": 1.0,
+          "latency_ms": 343.968,
+          "ranking": [
+            {
+              "rank": 1,
+              "document_id": "shipping-policy",
+              "section_title": "包裹破损或缺失",
+              "final_score": 5.265322685241699,
+              "retrieval_score": 0.5
+            },
+            {
+              "rank": 2,
+              "document_id": "shipping-policy",
+              "section_title": "物流延迟",
+              "final_score": -0.8947420120239258,
+              "retrieval_score": 0.11111111
+            },
+            {
+              "rank": 3,
+              "document_id": "refund-policy",
+              "section_title": "质量问题",
+              "final_score": -0.9904068112373352,
+              "retrieval_score": 0.14285715
+            }
+          ]
+        },
+        {
+          "case_id": "shipping-wrong-item",
+          "passed": true,
+          "expect_empty": false,
+          "returned_count": 3,
+          "first_relevant_rank": 1,
+          "reciprocal_rank": 1.0,
+          "first_relevant_score": 4.462357521057129,
+          "tenant_isolation_violations": 0,
+          "relevant_ranks": [
+            1
+          ],
+          "ndcg_at_k": 1.0,
+          "latency_ms": 379.969,
+          "ranking": [
+            {
+              "rank": 1,
+              "document_id": "shipping-policy",
+              "section_title": "包裹破损或缺失",
+              "final_score": 4.462357521057129,
+              "retrieval_score": 0.5
+            },
+            {
+              "rank": 2,
+              "document_id": "refund-policy",
+              "section_title": "质量问题",
+              "final_score": -2.430976629257202,
+              "retrieval_score": 0.14285715
+            },
+            {
+              "rank": 3,
+              "document_id": "shipping-policy",
+              "section_title": "物流延迟",
+              "final_score": -4.621742248535156,
+              "retrieval_score": 0.11111111
+            }
+          ]
+        },
+        {
+          "case_id": "unknown-tenant-refund-empty",
+          "passed": true,
+          "expect_empty": true,
+          "returned_count": 0,
+          "first_relevant_rank": null,
+          "reciprocal_rank": null,
+          "first_relevant_score": null,
+          "tenant_isolation_violations": 0,
+          "relevant_ranks": [],
+          "ndcg_at_k": null,
+          "latency_ms": 18.81,
+          "ranking": []
+        },
+        {
+          "case_id": "unknown-tenant-shipping-empty",
+          "passed": true,
+          "expect_empty": true,
+          "returned_count": 0,
+          "first_relevant_rank": null,
+          "reciprocal_rank": null,
+          "first_relevant_score": null,
+          "tenant_isolation_violations": 0,
+          "relevant_ranks": [],
+          "ndcg_at_k": null,
+          "latency_ms": 19.652,
+          "ranking": []
+        },
+        {
+          "case_id": "unknown-tenant-damage-empty",
+          "passed": true,
+          "expect_empty": true,
+          "returned_count": 0,
+          "first_relevant_rank": null,
+          "reciprocal_rank": null,
+          "first_relevant_score": null,
+          "tenant_isolation_violations": 0,
+          "relevant_ranks": [],
+          "ndcg_at_k": null,
+          "latency_ms": 19.258,
+          "ranking": []
+        }
+      ]
+    }
+  ],
+  "baseline_to_final_delta": {
+    "hit_at_k": 0.03703703703703709,
+    "mrr_at_k": 0.12962962962962965,
+    "ndcg_at_k": 0.10626186097883494,
+    "tenant_isolation_violations": 0
+  }
+}

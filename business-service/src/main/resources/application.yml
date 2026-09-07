@@ -1,0 +1,39 @@
+spring:
+  application:
+    name: business-service
+  datasource:
+    url: jdbc:h2:mem:agent_business;MODE=MySQL;DB_CLOSE_DELAY=-1;DATABASE_TO_LOWER=TRUE
+    username: sa
+    password:
+    driver-class-name: org.h2.Driver
+    hikari:
+      connection-init-sql: SET TIME ZONE 'UTC'
+  flyway:
+    enabled: true
+
+mybatis:
+  configuration:
+    map-underscore-to-camel-case: true
+
+server:
+  port: ${BUSINESS_SERVICE_PORT:8080}
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
+  endpoint:
+    health:
+      show-details: never
+
+business:
+  environment: ${BUSINESS_ENVIRONMENT:local}
+  refund-idempotency:
+    key-prefix: ${BUSINESS_REDIS_KEY_PREFIX:esa}
+    processing-ttl-seconds: ${BUSINESS_REFUND_PROCESSING_TTL_SECONDS:60}
+    completed-ttl-seconds: ${BUSINESS_REFUND_COMPLETED_TTL_SECONDS:86400}
+
+agent-service:
+  base-url: ${AGENT_SERVICE_BASE_URL:http://127.0.0.1:8000}
+  internal-token: ${AGENT_INTERNAL_SERVICE_TOKEN}

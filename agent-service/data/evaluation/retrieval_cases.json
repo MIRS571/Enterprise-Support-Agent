@@ -1,0 +1,185 @@
+[
+  {
+    "case_id": "refund-unshipped-cancel",
+    "question": "订单还没有发货，应该怎么退款？",
+    "tenant_id": "company_001",
+    "expected_sources": [{"document_id": "refund-policy", "section_title": "未发货订单", "required_keywords": ["直接申请取消"]}]
+  },
+  {
+    "case_id": "refund-unshipped-original-payment",
+    "question": "还没发出的订单取消后，钱会退到哪里？",
+    "tenant_id": "company_001",
+    "expected_sources": [{"document_id": "refund-policy", "section_title": "未发货订单", "required_keywords": ["原支付方式退回"]}]
+  },
+  {
+    "case_id": "refund-paid-not-shipped",
+    "question": "商品已经付款但商家尚未发出，我可以直接撤单吗？",
+    "tenant_id": "company_001",
+    "expected_sources": [{"document_id": "refund-policy", "section_title": "未发货订单", "required_keywords": ["直接申请取消"]}]
+  },
+  {
+    "case_id": "refund-shipped-no-direct-cancel",
+    "question": "快递已经寄出来了还能直接取消吗？",
+    "tenant_id": "company_001",
+    "expected_sources": [{"document_id": "refund-policy", "section_title": "已发货订单", "required_keywords": ["不能直接取消"]}]
+  },
+  {
+    "case_id": "refund-shipped-return-after-receipt",
+    "question": "订单发货以后想退款，需要先签收再处理吗？",
+    "tenant_id": "company_001",
+    "expected_sources": [{"document_id": "refund-policy", "section_title": "已发货订单", "required_keywords": ["退货退款"]}]
+  },
+  {
+    "case_id": "refund-shipping-interception",
+    "question": "已经在运输中的商品能让系统直接拦截物流吗？",
+    "tenant_id": "company_001",
+    "expected_sources": [{"document_id": "refund-policy", "section_title": "已发货订单", "required_keywords": ["人工客服"]}]
+  },
+  {
+    "case_id": "refund-opened-software",
+    "question": "已经拆封的软件支持无理由退款吗？",
+    "tenant_id": "company_001",
+    "expected_sources": [{"document_id": "refund-policy", "section_title": "七天无理由退货", "required_keywords": ["不支持七天无理由退货"]}]
+  },
+  {
+    "case_id": "refund-activated-digital-product",
+    "question": "软件激活后还能按七天无理由退货吗？",
+    "tenant_id": "company_001",
+    "expected_sources": [{"document_id": "refund-policy", "section_title": "七天无理由退货", "required_keywords": ["激活或使用的软件"]}]
+  },
+  {
+    "case_id": "refund-seven-day-condition",
+    "question": "申请七天无理由退货时，商品和配件需要保持什么状态？",
+    "tenant_id": "company_001",
+    "expected_sources": [{"document_id": "refund-policy", "section_title": "七天无理由退货", "required_keywords": ["配件齐全"]}]
+  },
+  {
+    "case_id": "refund-quality-shipping-fee",
+    "question": "质量问题退货的运费由谁承担？",
+    "tenant_id": "company_001",
+    "expected_sources": [{"document_id": "refund-policy", "section_title": "质量问题", "required_keywords": ["由商家承担"]}]
+  },
+  {
+    "case_id": "refund-quality-evidence",
+    "question": "商品有质量故障，申请售后需要提交哪些材料？",
+    "tenant_id": "company_001",
+    "expected_sources": [{"document_id": "refund-policy", "section_title": "质量问题", "required_keywords": ["必要凭证"]}]
+  },
+  {
+    "case_id": "refund-quality-review",
+    "question": "只要说商品有问题，商家就一定承担退货运费吗？",
+    "tenant_id": "company_001",
+    "expected_sources": [{"document_id": "refund-policy", "section_title": "质量问题", "required_keywords": ["审核确认"]}]
+  },
+  {
+    "case_id": "refund-flag-not-completed",
+    "question": "订单显示 refundable=true，是不是说明退款已经到账？",
+    "tenant_id": "company_001",
+    "expected_sources": [{"document_id": "refund-policy", "section_title": "退款资格说明", "required_keywords": ["不代表退款已经完成"]}]
+  },
+  {
+    "case_id": "refund-flag-not-guaranteed",
+    "question": "有退款资格是不是代表申请一定会自动通过？",
+    "tenant_id": "company_001",
+    "expected_sources": [{"document_id": "refund-policy", "section_title": "退款资格说明", "required_keywords": ["不代表申请必然自动通过"]}]
+  },
+  {
+    "case_id": "refund-final-review-result",
+    "question": "系统允许提交退款后，最终结果由什么决定？",
+    "tenant_id": "company_001",
+    "expected_sources": [{"document_id": "refund-policy", "section_title": "退款资格说明", "required_keywords": ["业务审核"]}]
+  },
+  {
+    "case_id": "shipping-status-unshipped",
+    "question": "订单状态显示未发货具体表示什么？",
+    "tenant_id": "company_001",
+    "expected_sources": [{"document_id": "shipping-policy", "section_title": "订单状态说明", "required_keywords": ["尚未交付承运方"]}]
+  },
+  {
+    "case_id": "shipping-status-shipped",
+    "question": "系统里的已发货状态是否表示承运方已经收件？",
+    "tenant_id": "company_001",
+    "expected_sources": [{"document_id": "shipping-policy", "section_title": "订单状态说明", "required_keywords": ["已经交付承运方"]}]
+  },
+  {
+    "case_id": "shipping-status-completed",
+    "question": "订单显示已完成代表进入了哪个阶段？",
+    "tenant_id": "company_001",
+    "expected_sources": [{"document_id": "shipping-policy", "section_title": "订单状态说明", "required_keywords": ["完成签收"]}]
+  },
+  {
+    "case_id": "shipping-live-location",
+    "question": "订单显示已发货，能直接知道包裹实时位置吗？",
+    "tenant_id": "company_001",
+    "expected_sources": [{"document_id": "shipping-policy", "section_title": "物流轨迹", "required_keywords": ["不能据此判断包裹的实时位置"]}]
+  },
+  {
+    "case_id": "shipping-estimated-arrival",
+    "question": "只看已发货状态，可以知道快递什么时候送到吗？",
+    "tenant_id": "company_001",
+    "expected_sources": [{"document_id": "shipping-policy", "section_title": "物流轨迹", "required_keywords": ["预计送达时间"]}]
+  },
+  {
+    "case_id": "shipping-carrier-tracking",
+    "question": "我要查看准确物流进度，应该以哪里的记录为准？",
+    "tenant_id": "company_001",
+    "expected_sources": [{"document_id": "shipping-policy", "section_title": "物流轨迹", "required_keywords": ["承运方轨迹"]}]
+  },
+  {
+    "case_id": "shipping-delay",
+    "question": "物流很久没有更新应该怎么办？",
+    "tenant_id": "company_001",
+    "expected_sources": [{"document_id": "shipping-policy", "section_title": "物流延迟", "required_keywords": ["人工客服"]}]
+  },
+  {
+    "case_id": "shipping-delay-no-invention",
+    "question": "物流停滞时，Agent能不能自己预测下一个物流节点？",
+    "tenant_id": "company_001",
+    "expected_sources": [{"document_id": "shipping-policy", "section_title": "物流延迟", "required_keywords": ["不得编造物流节点"]}]
+  },
+  {
+    "case_id": "shipping-delay-carrier-check",
+    "question": "物流异常需要进一步处理时应该找谁核实承运方状态？",
+    "tenant_id": "company_001",
+    "expected_sources": [{"document_id": "shipping-policy", "section_title": "物流延迟", "required_keywords": ["人工客服核实承运方状态"]}]
+  },
+  {
+    "case_id": "shipping-damaged-package",
+    "question": "签收时发现外包装明显破损，需要保留什么？",
+    "tenant_id": "company_001",
+    "expected_sources": [{"document_id": "shipping-policy", "section_title": "包裹破损或缺失", "required_keywords": ["保留外包装"]}]
+  },
+  {
+    "case_id": "shipping-missing-item",
+    "question": "收到包裹后发现少了一件商品，应该怎样申请处理？",
+    "tenant_id": "company_001",
+    "expected_sources": [{"document_id": "shipping-policy", "section_title": "包裹破损或缺失", "required_keywords": ["售后入口"]}]
+  },
+  {
+    "case_id": "shipping-wrong-item",
+    "question": "收到的东西与订单不一致，需要提供照片并从哪里提交？",
+    "tenant_id": "company_001",
+    "expected_sources": [{"document_id": "shipping-policy", "section_title": "包裹破损或缺失", "required_keywords": ["商品照片", "售后入口"]}]
+  },
+  {
+    "case_id": "unknown-tenant-refund-empty",
+    "question": "订单还没有发货，应该怎么退款？",
+    "tenant_id": "company_without_knowledge",
+    "expected_sources": [],
+    "expect_empty": true
+  },
+  {
+    "case_id": "unknown-tenant-shipping-empty",
+    "question": "物流很久没有更新应该怎么办？",
+    "tenant_id": "company_without_knowledge",
+    "expected_sources": [],
+    "expect_empty": true
+  },
+  {
+    "case_id": "unknown-tenant-damage-empty",
+    "question": "包裹破损应该怎么处理？",
+    "tenant_id": "company_without_knowledge",
+    "expected_sources": [],
+    "expect_empty": true
+  }
+]

@@ -1,0 +1,5 @@
+target
+.m2-repository
+.env.local
+.idea
+*.log

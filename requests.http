@@ -1,0 +1,75 @@
+### Python Agent 健康检查
+GET http://127.0.0.1:8000/api/v1/health
+Accept: application/json
+
+### Java Actuator 健康检查
+GET http://127.0.0.1:8080/actuator/health
+Accept: application/json
+
+### Java 业务服务信息
+GET http://127.0.0.1:8080/api/v1/system/info
+Accept: application/json
+
+### 查询当前用户自己的订单：200
+GET http://127.0.0.1:8080/api/v1/orders/A1001
+X-Tenant-Id: company_001
+X-User-Id: U1001
+Accept: application/json
+
+### 查询不存在的订单：404
+GET http://127.0.0.1:8080/api/v1/orders/UNKNOWN
+X-Tenant-Id: company_001
+X-User-Id: U1001
+Accept: application/json
+
+### 查询其他用户的订单：404，不能泄露订单是否存在
+GET http://127.0.0.1:8080/api/v1/orders/A1001
+X-Tenant-Id: company_001
+X-User-Id: U9999
+Accept: application/json
+
+### 通过 Java 创建 Agent 会话：201
+POST http://127.0.0.1:8080/api/v1/agent/threads
+X-Tenant-Id: company_001
+X-User-Id: U1001
+Accept: application/json
+
+> {%
+    client.global.set("thread_id", response.body.thread_id);
+%}
+
+### 通过 Java 演示多租户 RAG 与结构化来源
+POST http://127.0.0.1:8080/api/v1/agent/chat/stream
+X-Tenant-Id: company_001
+X-User-Id: U1001
+Accept: text/event-stream
+Content-Type: application/json
+
+{
+  "thread_id": "{{thread_id}}",
+  "message": "已经拆封的软件支持七天无理由退货吗？"
+}
+
+### 通过 Java 接收 Agent SSE
+POST http://127.0.0.1:8080/api/v1/agent/chat/stream
+X-Tenant-Id: company_001
+X-User-Id: U1001
+Accept: text/event-stream
+Content-Type: application/json
+
+{
+  "thread_id": "{{thread_id}}",
+  "message": "请帮我申请订单 A1001 的退款"
+}
+
+### 拒绝退款并从原 LangGraph Checkpoint 恢复（可重复演示）
+POST http://127.0.0.1:8080/api/v1/agent/threads/{{thread_id}}/resume
+X-Tenant-Id: company_001
+X-User-Id: U1001
+Idempotency-Key: refund-demo-001
+Accept: application/json
+Content-Type: application/json
+
+{
+  "approved": false
+}

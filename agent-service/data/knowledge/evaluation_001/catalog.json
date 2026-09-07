@@ -1,0 +1,12 @@
+{
+  "tenant_id": "evaluation_001",
+  "documents": [
+    {
+      "document_id": "refund-policy",
+      "title": "评测租户退款与退货政策",
+      "source": "refund_policy.md",
+      "version": "evaluation-1.0",
+      "effective_date": "2026-09-01"
+    }
+  ]
+}

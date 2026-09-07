@@ -1,0 +1,181 @@
+services:
+  mysql:
+    image: mysql:8.4.11
+    container_name: enterprise-support-mysql
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: agent_business
+      MYSQL_USER: agent
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+      TZ: Asia/Shanghai
+    command:
+      - --character-set-server=utf8mb4
+      - --collation-server=utf8mb4_0900_ai_ci
+    ports:
+      - "${MYSQL_PORT:-3306}:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+    healthcheck:
+      test:
+        - CMD-SHELL
+        - mysqladmin ping -h 127.0.0.1 -uroot -p$$MYSQL_ROOT_PASSWORD --silent
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 30s
+
+  qdrant:
+    image: qdrant/qdrant:v1.18.2
+    container_name: enterprise-support-qdrant
+    restart: unless-stopped
+    ports:
+      - "${QDRANT_PORT:-6333}:6333"
+    volumes:
+      - qdrant_data:/qdrant/storage
+
+  postgres:
+    image: postgres:17.6-alpine
+    container_name: enterprise-support-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: agent_checkpoint
+      POSTGRES_USER: agent_checkpoint
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      TZ: Asia/Shanghai
+    ports:
+      - "${POSTGRES_PORT:-5432}:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test:
+        - CMD-SHELL
+        - pg_isready -U $$POSTGRES_USER -d $$POSTGRES_DB
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 20s
+
+  redis:
+    image: redis:8.4.6-alpine
+    container_name: enterprise-support-redis
+    restart: unless-stopped
+    environment:
+      REDIS_PASSWORD: ${REDIS_PASSWORD}
+      TZ: Asia/Shanghai
+    command:
+      - sh
+      - -c
+      - >-
+        exec redis-server --appendonly yes
+        --requirepass "$$REDIS_PASSWORD"
+    ports:
+      - "${REDIS_PORT:-6379}:6379"
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test:
+        - CMD-SHELL
+        - REDISCLI_AUTH=$$REDIS_PASSWORD redis-cli ping | grep -q PONG
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 10s
+
+  business-service:
+    build:
+      context: ../business-service
+      args:
+        HTTP_PROXY: ${OUTBOUND_PROXY_URL:-}
+        HTTPS_PROXY: ${OUTBOUND_PROXY_URL:-}
+        NO_PROXY: >-
+          localhost,127.0.0.1,::1,mysql,postgres,redis,qdrant,business-service,agent-service
+    container_name: enterprise-support-business-service
+    restart: unless-stopped
+    environment:
+      SPRING_PROFILES_ACTIVE: mysql
+      BUSINESS_ENVIRONMENT: docker
+      BUSINESS_DB_URL: >-
+        jdbc:mysql://mysql:3306/agent_business?useUnicode=true&characterEncoding=utf8&serverTimezone=UTC
+      BUSINESS_DB_USERNAME: agent
+      BUSINESS_DB_PASSWORD: ${MYSQL_PASSWORD}
+      BUSINESS_REDIS_HOST: redis
+      BUSINESS_REDIS_PORT: 6379
+      BUSINESS_REDIS_PASSWORD: ${REDIS_PASSWORD}
+      AGENT_SERVICE_BASE_URL: http://agent-service:8000
+      AGENT_INTERNAL_SERVICE_TOKEN: ${AGENT_INTERNAL_SERVICE_TOKEN}
+    ports:
+      - "${BUSINESS_SERVICE_PORT:-8080}:8080"
+    depends_on:
+      mysql:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+
+  agent-service:
+    build:
+      context: ../agent-service
+      args:
+        HTTP_PROXY: ${OUTBOUND_PROXY_URL:-}
+        HTTPS_PROXY: ${OUTBOUND_PROXY_URL:-}
+        NO_PROXY: >-
+          localhost,127.0.0.1,::1,mysql,postgres,redis,qdrant,business-service,agent-service
+    container_name: enterprise-support-agent-service
+    restart: unless-stopped
+    environment:
+      AGENT_ENVIRONMENT: docker
+      AGENT_BUSINESS_SERVICE_BASE_URL: http://business-service:8080
+      AGENT_LLM_MODEL: ${AGENT_LLM_MODEL:-deepseek-v4-flash}
+      AGENT_LLM_API_KEY: ${AGENT_LLM_API_KEY}
+      AGENT_LLM_BASE_URL: ${AGENT_LLM_BASE_URL:-https://api.deepseek.com}
+      AGENT_LLM_THINKING_ENABLED: "false"
+      AGENT_INTERNAL_SERVICE_TOKEN: ${AGENT_INTERNAL_SERVICE_TOKEN}
+      AGENT_CHECKPOINT_ENABLED: "true"
+      AGENT_CHECKPOINT_DATABASE_URL: >-
+        postgresql://agent_checkpoint:${POSTGRES_PASSWORD}@postgres:5432/agent_checkpoint
+      AGENT_REDIS_ENABLED: "true"
+      AGENT_REDIS_URL: redis://:${REDIS_PASSWORD}@redis:6379/0
+      AGENT_QDRANT_URL: http://qdrant:6333
+      AGENT_QDRANT_COLLECTION_NAME: enterprise_support_knowledge
+      AGENT_KNOWLEDGE_BASE_DIRECTORY: data/knowledge
+      AGENT_RAG_ENABLED: "true"
+      AGENT_EMBEDDING_MODEL_NAME: >-
+        sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2
+      AGENT_EMBEDDING_DEVICE: cpu
+      AGENT_EMBEDDING_NORMALIZE: "true"
+      HTTP_PROXY: ${OUTBOUND_PROXY_URL:-}
+      HTTPS_PROXY: ${OUTBOUND_PROXY_URL:-}
+      NO_PROXY: >-
+        localhost,127.0.0.1,::1,mysql,postgres,redis,qdrant,business-service,agent-service
+    expose:
+      - "8000"
+    volumes:
+      - huggingface_cache:/cache/huggingface
+    depends_on:
+      business-service:
+        condition: service_started
+      postgres:
+        condition: service_healthy
+      qdrant:
+        condition: service_started
+      redis:
+        condition: service_healthy
+    healthcheck:
+      test:
+        - CMD
+        - python
+        - -c
+        - >-
+          import urllib.request;
+          urllib.request.urlopen('http://127.0.0.1:8000/api/v1/health', timeout=3)
+      interval: 15s
+      timeout: 5s
+      retries: 10
+      start_period: 120s
+
+volumes:
+  mysql_data:
+  qdrant_data:
+  postgres_data:
+  redis_data:
+  huggingface_cache:

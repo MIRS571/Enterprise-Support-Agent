@@ -1,0 +1,16 @@
+spring:
+  datasource:
+    url: ${BUSINESS_DB_URL:jdbc:mysql://127.0.0.1:3306/agent_business?useUnicode=true&characterEncoding=utf8&serverTimezone=UTC}
+    username: ${BUSINESS_DB_USERNAME:agent}
+    password: ${BUSINESS_DB_PASSWORD}
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    hikari:
+      connection-init-sql: SET time_zone = '+00:00'
+  flyway:
+    enabled: true
+  data:
+    redis:
+      host: ${BUSINESS_REDIS_HOST:127.0.0.1}
+      port: ${BUSINESS_REDIS_PORT:6379}
+      password: ${BUSINESS_REDIS_PASSWORD}
+      timeout: 1s
