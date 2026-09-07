@@ -144,17 +144,15 @@ cd ../business-service
 
 - 开发环境以 `X-Tenant-Id`、`X-User-Id` 模拟 Java 已验证的身份；生产环境必须由 Spring Security/网关验证 JWT 后生成身份上下文。
 - Java → Python 的共享内部令牌只证明调用者是 Java，不能代替最终用户认证。
-- 曾出现在诊断输出中的 PostgreSQL 密码必须在生产部署前轮换。
+- 生产部署前应使用独立强密码，并建立统一的密钥轮换机制。
 - Python CPU 镜像和全 Compose 联合验收仍为延期状态，不能声称已经完成生产部署。
 - 生产环境还需要私有基础设施网络、TLS/mTLS、Qdrant 认证和依赖/镜像漏洞扫描。
 
-完整清单见 [Day 10 安全与部署验收](docs/day-10-security-and-deployment.md)。
+完整清单见 [安全与部署验收](docs/security-and-deployment.md)。
 
 ## 延伸文档
 
 - [最终演示流程](docs/demo-walkthrough.md)
 - [架构与请求流程](docs/architecture.md)
-- [Day 5–6 RAG 总结](docs/day-05-06-rag-summary.md)
 - [混合检索与重排评测](docs/evaluation/retrieval-hybrid-rerank.md)
-- [安全与部署验收](docs/day-10-security-and-deployment.md)
-- [简历描述与面试讲解](docs/resume-and-interview.md)
+- [安全与部署验收](docs/security-and-deployment.md)

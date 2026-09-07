@@ -1,6 +1,6 @@
 # Agent Service
 
-Python AI 服务。第一天仅提供健康检查，后续逐步加入 LangChain、LangGraph、RAG、checkpoint 和 SSE。
+基于 FastAPI、LangChain 与 LangGraph 的 Agent 编排服务，提供结构化意图识别、多租户 RAG、持久化会话、人工审批和 SSE 流式响应能力。
 
 ```powershell
 uv sync
