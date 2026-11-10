@@ -1,5 +1,9 @@
 # Enterprise Support Agent
 
+当前作者本机演示已连接虚拟机 MySQL / Redis / PostgreSQL / Qdrant，支持登录与真实 RAG。已完成本机配置时可运行 `scripts/start-vm-demo.ps1`，打开 http://127.0.0.1:5175 。见 [虚拟机部署说明](docs/vm-deployment.md)。
+
+首次克隆请按下方「最小启动说明」配置环境；`.local-run/`、`.local-tools/`、真实 `.env`、数据库文件和模型缓存不在仓库中，本机专用启动脚本不能直接用于未配置的新电脑。
+
 面向电商售后场景的企业级智能客服 Agent。系统支持订单查询、企业政策问答、多轮会话和退款人工确认，并将大模型的不确定推理与 Java 的确定性业务规则分离。
 
 项目不是单个 LangChain Demo：客户端统一访问 Java，Python 使用 LangGraph 编排模型、RAG 和业务工具，MySQL、Qdrant、PostgreSQL、Redis 分别承担业务事实、向量检索、持久记忆和高频临时状态。
@@ -18,7 +22,7 @@
 
 ```text
 客户端
-  │  JWT（生产目标；当前开发环境使用可信身份头）
+  │  JWT（Spring Security 验签、账号状态与 Redis 黑名单校验）
   ▼
 Java business-service :8080
   ├── MySQL：订单事实与原子退款状态迁移
@@ -85,6 +89,10 @@ enterprise-support-agent/
 
 ## 最小启动说明
 
+### 可视化演示页面
+
+已增加本地聊天工作台：会话列表、SSE 流式回答、订单速览、退款确认卡片、知识来源与真实事件记录。先启动 Java / Python / PostgreSQL，再在项目根目录执行 `.\scripts\start-frontend.ps1`，打开 http://127.0.0.1:5175。前端无需安装依赖，详细步骤和能力边界见 [前端说明](frontend/README.md)。
+
 先从示例文件创建私有环境配置，所有示例密码和令牌都必须替换，真实 `.env` 不得提交。
 
 基础设施与容器化说明见 [infra/README.md](infra/README.md)。本地调试时需要保证 Java 和 Python 的 `AGENT_INTERNAL_SERVICE_TOKEN` 完全相同。
@@ -124,12 +132,13 @@ cd ../business-service
 .\mvnw.cmd test
 ```
 
-当前已验证证据：
+自动测试于 2026-11-10 复验；RAG 与真实 Agent 指标来自下方历史报告，本次上传未重新执行在线模型评测：
 
 | 项目 | 结果 |
 | --- | ---: |
-| Python 自动测试 | 188 passed |
-| Java 自动测试 | 32 passed |
+| Python 自动测试 | 189 passed |
+| Java 自动测试 | 42 passed |
+| 前端自动测试 | 6 passed |
 | RAG Dense 基线 Hit@3 | 96.30% |
 | RAG Dense 基线 MRR@3 | 0.8704 |
 | RAG Hybrid + Cross-Encoder Hit@3 | 100% |
@@ -142,7 +151,7 @@ cd ../business-service
 
 ## 安全边界与当前限制
 
-- 开发环境以 `X-Tenant-Id`、`X-User-Id` 模拟 Java 已验证的身份；生产环境必须由 Spring Security/网关验证 JWT 后生成身份上下文。
+- Java 入口已接入 JWT / Spring Security：外部身份头不参与认证，登录账号从数据库读取，退出时写 Redis jti 黑名单。配置、演示账号和运行边界见 [认证说明](docs/authentication.md)。
 - Java → Python 的共享内部令牌只证明调用者是 Java，不能代替最终用户认证。
 - 生产部署前应使用独立强密码，并建立统一的密钥轮换机制。
 - Python CPU 镜像和全 Compose 联合验收仍为延期状态，不能声称已经完成生产部署。

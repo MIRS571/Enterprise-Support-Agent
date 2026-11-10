@@ -38,6 +38,21 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureMockMvc
 class AgentControllerTests {
 
+    @Test
+    void rejectedSseRequestKeepsJsonErrorAnd404() throws Exception {
+        when(agentServiceClient.streamChat(any(), any(), any(), any())).thenReturn(Mono.error(
+                org.springframework.web.reactive.function.client.WebClientResponseException.create(
+                        404, "Not found", org.springframework.http.HttpHeaders.EMPTY, new byte[0], null)));
+        MvcResult pending = mockMvc.perform(post("/api/v1/agent/chat/stream")
+                        .with(com.mirs.agent.business.auth.AuthTestSupport.user("company_001", "U1001"))
+                        .accept(MediaType.TEXT_EVENT_STREAM).contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"thread_id\":\"other-user-thread\",\"message\":\"query\"}"))
+                .andExpect(request().asyncStarted()).andReturn();
+        mockMvc.perform(asyncDispatch(pending)).andExpect(status().isNotFound())
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.code").value("AGENT_RESOURCE_NOT_FOUND"));
+    }
+
     private static final String REQUEST_ID =
             "c1ac5efd-1bb4-4dbf-b0e6-3a8320c4f30b";
 
@@ -64,8 +79,7 @@ class AgentControllerTests {
 
         MvcResult pending = mockMvc.perform(
                         post("/api/v1/agent/threads")
-                                .header("X-Tenant-Id", "evaluation_001")
-                                .header("X-User-Id", "EVAL_U1001")
+                                .with(com.mirs.agent.business.auth.AuthTestSupport.user("evaluation_001", "EVAL_U1001"))
                                 .header("X-Request-Id", REQUEST_ID)
                 )
                 .andExpect(request().asyncStarted())
@@ -101,8 +115,7 @@ class AgentControllerTests {
 
         MvcResult pending = mockMvc.perform(
                         post("/api/v1/agent/chat/stream")
-                                .header("X-Tenant-Id", "company_001")
-                                .header("X-User-Id", "U1001")
+                                .with(com.mirs.agent.business.auth.AuthTestSupport.user("company_001", "U1001"))
                                 .header("X-Request-Id", REQUEST_ID)
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content("""
@@ -148,8 +161,7 @@ class AgentControllerTests {
 
         MvcResult pending = mockMvc.perform(
                         post("/api/v1/agent/chat/stream")
-                                .header("X-Tenant-Id", "company_001")
-                                .header("X-User-Id", "U1001")
+                                .with(com.mirs.agent.business.auth.AuthTestSupport.user("company_001", "U1001"))
                                 .header("X-Request-Id", REQUEST_ID)
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content("""
@@ -194,8 +206,7 @@ class AgentControllerTests {
                                 "/api/v1/agent/threads/"
                                         + "thread_001/resume"
                         )
-                                .header("X-Tenant-Id", "company_001")
-                                .header("X-User-Id", "U1001")
+                                .with(com.mirs.agent.business.auth.AuthTestSupport.user("company_001", "U1001"))
                                 .header("X-Request-Id", REQUEST_ID)
                                 .header(
                                         "Idempotency-Key",
@@ -223,8 +234,7 @@ class AgentControllerTests {
                                 "/api/v1/agent/threads/"
                                         + "thread_001/resume"
                         )
-                                .header("X-Tenant-Id", "company_001")
-                                .header("X-User-Id", "U1001")
+                                .with(com.mirs.agent.business.auth.AuthTestSupport.user("company_001", "U1001"))
                                 .header("X-Request-Id", REQUEST_ID)
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content("{\"approved\":true}")

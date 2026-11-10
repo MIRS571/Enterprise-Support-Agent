@@ -1,5 +1,7 @@
 import argparse
 import asyncio
+import json
+import os
 from pathlib import Path
 
 import httpx
@@ -58,6 +60,13 @@ async def run(args: argparse.Namespace) -> int:
         raise ValueError("model name is required for the live evaluation report")
 
     cases = load_agent_evaluation_cases(args.cases)
+    identity_tokens = json.loads(os.environ.get("AGENT_EVAL_IDENTITY_TOKENS", "{}"))
+    if not isinstance(identity_tokens, dict):
+        raise TypeError("AGENT_EVAL_IDENTITY_TOKENS must be a JSON object")
+    for case in cases:
+        token = identity_tokens.get(f"{case.tenant_id}/{case.user_id}")
+        if not isinstance(token, str) or not token:
+            raise ValueError("Provide a valid JWT for every evaluation identity")
     timeout = httpx.Timeout(
         connect=5.0,
         read=180.0,
@@ -71,7 +80,7 @@ async def run(args: argparse.Namespace) -> int:
     ) as http_client:
         suite = await run_live_agent_suite(
             cases=cases,
-            runner=JavaAgentLiveClient(http_client),
+            runner=JavaAgentLiveClient(http_client, identity_tokens=identity_tokens),
         )
 
     report = build_live_agent_evaluation_report(

@@ -1,0 +1,7 @@
+{
+  "name": "support-agent-demo",
+  "private": true,
+  "type": "module",
+  "scripts": { "start": "node server.mjs", "test": "node --test test/*.test.mjs" },
+  "engines": { "node": ">=20" }
+}

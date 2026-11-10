@@ -18,6 +18,12 @@ import java.time.Instant;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
+    @ExceptionHandler(org.springframework.dao.DataAccessException.class)
+    public ResponseEntity<ApiErrorResponse> handleStorageUnavailable(org.springframework.dao.DataAccessException exception) {
+        return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).body(new ApiErrorResponse(
+                "STORAGE_UNAVAILABLE", "服务暂时不可用，请稍后重试；退出操作尚未确认成功", Instant.now()));
+    }
+
     @ExceptionHandler(WebClientResponseException.class)
     public ResponseEntity<ApiErrorResponse> handleAgentResponseError(
             WebClientResponseException exception
@@ -28,7 +34,7 @@ public class GlobalExceptionHandler {
             case 503 -> "AGENT_SERVICE_UNAVAILABLE";
             default -> "AGENT_UPSTREAM_ERROR";
         };
-        return ResponseEntity.status(exception.getStatusCode()).body(
+        return ResponseEntity.status(exception.getStatusCode()).contentType(org.springframework.http.MediaType.APPLICATION_JSON).body(
                 new ApiErrorResponse(
                         code,
                         "Agent 服务暂时无法完成请求",
@@ -41,7 +47,7 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ApiErrorResponse> handleAgentConnectionError(
             WebClientRequestException exception
     ) {
-        return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).body(
+        return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).contentType(org.springframework.http.MediaType.APPLICATION_JSON).body(
                 new ApiErrorResponse(
                         "AGENT_SERVICE_UNAVAILABLE",
                         "Agent 服务暂时不可用",

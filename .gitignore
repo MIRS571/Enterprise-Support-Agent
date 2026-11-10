@@ -20,3 +20,9 @@
 *.log
 .DS_Store
 Thumbs.db
+
+# Private local services, credentials, databases and model downloads
+.local-run/
+.local-tools/
+**/node_modules/
+frontend/dist/

@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="zh-CN">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>岸 · 售后服务助手</title><link rel="stylesheet" href="/style.css"></head>
+<body>
+<section id="login-screen" class="login-screen">
+  <div class="login-story"><div class="brand"><span class="brand-mark">岸</span><span>SUPPORT</span></div><span class="eyebrow">YOUR SUPPORT, SECURELY CONNECTED</span><h1>每一次协助，<br>从确认身份开始。</h1><p>让订单有迹可循，让处理有据可依。<br>登录你的账号，继续与售后服务助手对话。</p><div class="login-feature">◇ 订单归属校验 <span>✧ 智能协助</span> ↶ 人工确认</div></div>
+  <div class="login-card"><span class="eyebrow">WELCOME BACK</span><h2>登录服务工作区</h2><p class="caption">使用已开通的账号登录，身份和权限由服务端验证。</p><form id="login-form"><label for="username">用户名</label><input id="username" name="username" autocomplete="username" maxlength="64" required placeholder="请输入用户名"><label for="password">密码</label><input id="password" name="password" type="password" autocomplete="current-password" maxlength="128" required placeholder="请输入密码"><div id="login-error" class="error" hidden role="alert"></div><button id="login-submit" type="submit">登录工作区 <span>→</span></button></form><p class="login-footnote">账号信息仅用于身份验证，不会发送给大模型。</p></div>
+</section>
+<div class="workspace" id="workspace" hidden>
+  <aside class="sidebar">
+    <a class="brand" href="/"><span class="brand-mark">岸</span><span>SUPPORT<span class="brand-sub">有依据的回答，有边界的行动</span></span></a>
+    <button class="new-chat" id="new-chat"><span>＋</span> 开始新会话 <kbd>N</kbd></button>
+    <div class="section-label">最近会话 <span id="session-count">0</span></div>
+    <nav id="sessions" aria-label="会话列表"></nav>
+    <div class="sidebar-bottom"><div class="local-note"><span class="dot"></span> 本地演示工作区</div><p>会话记录保存在当前浏览器。<br>业务结果以服务端返回为准。</p><div class="profile"><span class="avatar">U</span><span id="profile-name">已登录<small id="profile-identity"></small></span></div></div>
+  </aside>
+  <main>
+    <header class="topbar"><div><span class="eyebrow">CUSTOMER CARE / AI WORKSPACE</span><h1>售后服务助手</h1></div><div class="topbar-actions"><button class="status-pill" id="health-refresh"><span class="dot"></span><span id="connection">正在连接服务</span><span>↻</span></button><button id="logout" class="logout">退出</button></div></header>
+    <div class="main-body">
+      <section class="conversation" aria-label="聊天工作区">
+        <div class="conversation-heading"><span>✧ 智能协助</span><span id="session-state">准备就绪</span></div>
+        <div class="scroll-area" id="scroll-area"><div class="welcome" id="welcome"><div class="welcome-icon">✧</div><span class="eyebrow">YOUR SUPPORT, SIMPLIFIED</span><h2>从一个问题，<br>到一个明确的答复。</h2><p>查订单、了解售后政策，或发起退款申请。<br>需要你确认的操作，会停下来等你决定。</p><div class="suggestions"><button data-prompt="帮我查询订单 {order_id} 的状态"><span>↗</span><strong>我的订单到哪了？</strong><small>查询订单速览中填写的订单</small></button><button data-prompt="已经拆封的软件支持七天无理由退货吗？"><span>▤</span><strong>了解退货政策</strong><small>有资料时回答，并展示来源</small></button><button data-prompt="请帮我申请订单 {order_id} 的退款"><span>↶</span><strong>申请订单退款</strong><small>先核对订单，再由你确认</small></button></div></div><div id="messages" aria-live="polite" aria-relevant="additions"></div></div>
+        <div class="composer-wrap"><div id="notice" class="notice" hidden></div><form id="composer"><label class="sr-only" for="input">输入问题</label><textarea id="input" rows="2" maxlength="4000" placeholder="告诉我你需要什么帮助，查订单时请提供订单号"></textarea><div class="composer-bottom"><span>✧ 连接真实业务服务</span><button id="send" type="submit" aria-label="发送消息">发送 <span>↑</span></button></div></form><div class="input-hint"><span>Enter 发送 · Shift + Enter 换行</span><span id="counter">0 / 4000</span></div></div>
+      </section>
+      <aside class="context-panel"><section><div class="panel-title"><h2>服务状态</h2><button id="refresh-side" aria-label="刷新服务状态">↻</button></div><div id="services" class="services"></div><p class="caption" id="identity-caption">当前身份已由服务端验证。</p></section>
+      <section><div class="panel-title"><h2>订单速览</h2><span class="tag">实时查询</span></div><form id="order-form"><label class="sr-only" for="order-id">订单号</label><input id="order-id" value="A1001" maxlength="64" placeholder="输入订单号"><button type="submit" aria-label="查询订单">↗</button></form><div id="order-card" class="order-card"><p class="caption">输入订单号，查看业务系统中的记录。</p></div></section>
+      <section class="trace-section"><div class="panel-title"><h2>本轮执行记录</h2><span class="tag" id="elapsed">—</span></div><ol id="trace" class="trace"><li>发送消息后展示实际收到的事件</li></ol><details><summary>会话标识</summary><code id="thread-id">尚未创建</code></details></section>
+      <div class="boundary-note"><span>◇</span><p>退款需明确确认<br><small>等待确认 ≠ 退款成功</small></p></div></aside>
+    </div>
+  </main>
+</div><script type="module" src="/app.js"></script>
+</body></html>

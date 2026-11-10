@@ -104,6 +104,13 @@ async def lifespan(app: FastAPI) -> AsyncIterator[None]:
             open_redis(settings) as redis_resources,
             httpx.AsyncClient(
                 base_url=str(settings.business_service_base_url),
+                headers={
+                    "X-Internal-Service-Token": (
+                        settings.internal_service_token.get_secret_value()
+                        if settings.internal_service_token is not None
+                        else ""
+                    )
+                },
                 timeout=timeout,
                 trust_env=False,
             ) as http_client,

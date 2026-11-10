@@ -1,4 +1,4 @@
-from collections.abc import AsyncIterator
+from collections.abc import AsyncIterator, Mapping
 from dataclasses import dataclass
 from typing import Literal, Self
 from uuid import UUID
@@ -81,8 +81,17 @@ class _RawSseEvent:
 class JavaAgentLiveClient:
     """Black-box evaluation client that talks only to the Java boundary."""
 
-    def __init__(self, client: httpx.AsyncClient) -> None:
+    def __init__(
+        self, client: httpx.AsyncClient, *, identity_tokens: Mapping[str, str]
+    ) -> None:
         self._client = client
+        self._identity_tokens = identity_tokens
+
+    def _identity_headers(self, case: AgentEvaluationCase) -> dict[str, str]:
+        token = self._identity_tokens.get(f"{case.tenant_id}/{case.user_id}")
+        if not token:
+            raise ValueError("Missing authenticated evaluation account token")
+        return {"Authorization": f"Bearer {token}"}
 
     async def run_case(
         self,
@@ -102,7 +111,7 @@ class JavaAgentLiveClient:
     async def _create_thread(self, case: AgentEvaluationCase) -> UUID:
         response = await self._client.post(
             "/api/v1/agent/threads",
-            headers=_identity_headers(case),
+            headers=self._identity_headers(case),
         )
         response.raise_for_status()
         if response.status_code != 201:
@@ -120,7 +129,7 @@ class JavaAgentLiveClient:
         async with self._client.stream(
             "POST",
             "/api/v1/agent/chat/stream",
-            headers=_identity_headers(case),
+            headers={**self._identity_headers(case), "Accept": "text/event-stream"},
             json={
                 "thread_id": str(thread_id),
                 "message": case.question,
@@ -245,13 +254,6 @@ def evaluate_live_agent_case(
         required_facts_passed=not missing_facts,
         missing_required_facts=missing_facts,
     )
-
-
-def _identity_headers(case: AgentEvaluationCase) -> dict[str, str]:
-    return {
-        "X-Tenant-Id": case.tenant_id,
-        "X-User-Id": case.user_id,
-    }
 
 
 async def _iter_sse(response: httpx.Response) -> AsyncIterator[_RawSseEvent]:

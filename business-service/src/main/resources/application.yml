@@ -37,3 +37,10 @@ business:
 agent-service:
   base-url: ${AGENT_SERVICE_BASE_URL:http://127.0.0.1:8000}
   internal-token: ${AGENT_INTERNAL_SERVICE_TOKEN}
+
+auth:
+  jwt-secret: ${AUTH_JWT_SECRET}
+  jwt-ttl-seconds: ${AUTH_JWT_TTL_SECONDS:3600}
+  bootstrap-enabled: ${AUTH_BOOTSTRAP_ENABLED:false}
+  bootstrap-password: ${AUTH_BOOTSTRAP_PASSWORD:}
+  bootstrap-second-password: ${AUTH_BOOTSTRAP_SECOND_PASSWORD:}

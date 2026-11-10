@@ -53,8 +53,7 @@ class OrderControllerTests {
     void shouldReturnOwnedOrder() throws Exception {
         mockMvc.perform(
                         get("/api/v1/orders/A1001")
-                                .header("X-Tenant-Id", "company_001")
-                                .header("X-User-Id", "U1001")
+                                .with(com.mirs.agent.business.auth.AuthTestSupport.user("company_001", "U1001"))
                 )
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.orderId").value("A1001"))
@@ -68,8 +67,7 @@ class OrderControllerTests {
     void shouldReturnNotFoundForUnknownOrder() throws Exception {
         mockMvc.perform(
                         get("/api/v1/orders/UNKNOWN")
-                                .header("X-Tenant-Id", "company_001")
-                                .header("X-User-Id", "U1001")
+                                .with(com.mirs.agent.business.auth.AuthTestSupport.user("company_001", "U1001"))
                 )
                 .andExpect(status().isNotFound())
                 .andExpect(jsonPath("$.code").value("ORDER_NOT_FOUND"));
@@ -79,8 +77,7 @@ class OrderControllerTests {
     void shouldHideOrderOwnedByAnotherUser() throws Exception {
         mockMvc.perform(
                         get("/api/v1/orders/A1001")
-                                .header("X-Tenant-Id", "company_001")
-                                .header("X-User-Id", "U9999")
+                                .with(com.mirs.agent.business.auth.AuthTestSupport.user("company_001", "U9999"))
                 )
                 .andExpect(status().isNotFound())
                 .andExpect(jsonPath("$.code").value("ORDER_NOT_FOUND"));
@@ -90,8 +87,7 @@ class OrderControllerTests {
     void shouldHideOrderOwnedByAnotherTenant() throws Exception {
         mockMvc.perform(
                         get("/api/v1/orders/A1001")
-                                .header("X-Tenant-Id", "company_999")
-                                .header("X-User-Id", "U1001")
+                                .with(com.mirs.agent.business.auth.AuthTestSupport.user("company_999", "U1001"))
                 )
                 .andExpect(status().isNotFound())
                 .andExpect(jsonPath("$.code").value("ORDER_NOT_FOUND"));
@@ -101,8 +97,7 @@ class OrderControllerTests {
     void shouldAcceptRefundForOwnedEligibleOrder() throws Exception {
         mockMvc.perform(
                         post("/api/v1/orders/A1001/refund-requests")
-                                .header("X-Tenant-Id", "company_001")
-                                .header("X-User-Id", "U1001")
+                                .with(com.mirs.agent.business.auth.AuthTestSupport.user("company_001", "U1001"))
                                 .header("Idempotency-Key", "refund-001")
                 )
                 .andExpect(status().isAccepted())
@@ -115,8 +110,7 @@ class OrderControllerTests {
     void shouldReturnConflictForIneligibleOwnedOrder() throws Exception {
         mockMvc.perform(
                         post("/api/v1/orders/A1002/refund-requests")
-                                .header("X-Tenant-Id", "company_001")
-                                .header("X-User-Id", "U1001")
+                                .with(com.mirs.agent.business.auth.AuthTestSupport.user("company_001", "U1001"))
                                 .header("Idempotency-Key", "refund-002")
                 )
                 .andExpect(status().isConflict())
@@ -127,8 +121,7 @@ class OrderControllerTests {
     void shouldHideRefundOrderOwnedByAnotherUser() throws Exception {
         mockMvc.perform(
                         post("/api/v1/orders/A1001/refund-requests")
-                                .header("X-Tenant-Id", "company_001")
-                                .header("X-User-Id", "U9999")
+                                .with(com.mirs.agent.business.auth.AuthTestSupport.user("company_001", "U9999"))
                                 .header("Idempotency-Key", "refund-003")
                 )
                 .andExpect(status().isNotFound())
@@ -139,8 +132,7 @@ class OrderControllerTests {
     void shouldRequireIdempotencyKeyForRefund() throws Exception {
         mockMvc.perform(
                         post("/api/v1/orders/A1001/refund-requests")
-                                .header("X-Tenant-Id", "company_001")
-                                .header("X-User-Id", "U1001")
+                                .with(com.mirs.agent.business.auth.AuthTestSupport.user("company_001", "U1001"))
                 )
                 .andExpect(status().isBadRequest());
     }
@@ -160,8 +152,7 @@ class OrderControllerTests {
 
         mockMvc.perform(
                         post("/api/v1/orders/A1002/refund-requests")
-                                .header("X-Tenant-Id", "company_001")
-                                .header("X-User-Id", "U1001")
+                                .with(com.mirs.agent.business.auth.AuthTestSupport.user("company_001", "U1001"))
                                 .header("Idempotency-Key", "refund-001")
                 )
                 .andExpect(status().isConflict())
@@ -184,8 +175,7 @@ class OrderControllerTests {
 
         mockMvc.perform(
                         post("/api/v1/orders/A1001/refund-requests")
-                                .header("X-Tenant-Id", "company_001")
-                                .header("X-User-Id", "U1001")
+                                .with(com.mirs.agent.business.auth.AuthTestSupport.user("company_001", "U1001"))
                                 .header("Idempotency-Key", "refund-001")
                 )
                 .andExpect(status().isConflict())

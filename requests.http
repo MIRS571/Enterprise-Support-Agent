@@ -1,3 +1,17 @@
+### 先登录：在 IDE 私有 HTTP 环境中设置 demo_password，勿提交密码
+POST http://127.0.0.1:8080/api/v1/auth/login
+Content-Type: application/json
+
+{"username":"customer1","password":"{{demo_password}}"}
+
+> {%
+    client.global.set("access_token", response.body.access_token);
+%}
+
+### 当前已认证身份
+GET http://127.0.0.1:8080/api/v1/auth/me
+Authorization: Bearer {{access_token}}
+
 ### Python Agent 健康检查
 GET http://127.0.0.1:8000/api/v1/health
 Accept: application/json
@@ -12,26 +26,22 @@ Accept: application/json
 
 ### 查询当前用户自己的订单：200
 GET http://127.0.0.1:8080/api/v1/orders/A1001
-X-Tenant-Id: company_001
-X-User-Id: U1001
+Authorization: Bearer {{access_token}}
 Accept: application/json
 
 ### 查询不存在的订单：404
 GET http://127.0.0.1:8080/api/v1/orders/UNKNOWN
-X-Tenant-Id: company_001
-X-User-Id: U1001
+Authorization: Bearer {{access_token}}
 Accept: application/json
 
 ### 查询其他用户的订单：404，不能泄露订单是否存在
-GET http://127.0.0.1:8080/api/v1/orders/A1001
-X-Tenant-Id: company_001
-X-User-Id: U9999
+GET http://127.0.0.1:8080/api/v1/orders/B2001
+Authorization: Bearer {{access_token}}
 Accept: application/json
 
 ### 通过 Java 创建 Agent 会话：201
 POST http://127.0.0.1:8080/api/v1/agent/threads
-X-Tenant-Id: company_001
-X-User-Id: U1001
+Authorization: Bearer {{access_token}}
 Accept: application/json
 
 > {%
@@ -40,8 +50,7 @@ Accept: application/json
 
 ### 通过 Java 演示多租户 RAG 与结构化来源
 POST http://127.0.0.1:8080/api/v1/agent/chat/stream
-X-Tenant-Id: company_001
-X-User-Id: U1001
+Authorization: Bearer {{access_token}}
 Accept: text/event-stream
 Content-Type: application/json
 
@@ -52,8 +61,7 @@ Content-Type: application/json
 
 ### 通过 Java 接收 Agent SSE
 POST http://127.0.0.1:8080/api/v1/agent/chat/stream
-X-Tenant-Id: company_001
-X-User-Id: U1001
+Authorization: Bearer {{access_token}}
 Accept: text/event-stream
 Content-Type: application/json
 
@@ -64,8 +72,7 @@ Content-Type: application/json
 
 ### 拒绝退款并从原 LangGraph Checkpoint 恢复（可重复演示）
 POST http://127.0.0.1:8080/api/v1/agent/threads/{{thread_id}}/resume
-X-Tenant-Id: company_001
-X-User-Id: U1001
+Authorization: Bearer {{access_token}}
 Idempotency-Key: refund-demo-001
 Accept: application/json
 Content-Type: application/json
@@ -73,3 +80,7 @@ Content-Type: application/json
 {
   "approved": false
 }
+
+### 退出：旧 access_token 随后访问受保护接口应返回 401
+POST http://127.0.0.1:8080/api/v1/auth/logout
+Authorization: Bearer {{access_token}}

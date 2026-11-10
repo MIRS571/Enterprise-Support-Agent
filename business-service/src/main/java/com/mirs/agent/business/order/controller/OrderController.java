@@ -1,6 +1,8 @@
 package com.mirs.agent.business.order.controller;
 
 import com.mirs.agent.business.order.domain.CustomerOrder;
+import com.mirs.agent.business.auth.Actor;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import com.mirs.agent.business.order.dto.OrderResponse;
 import com.mirs.agent.business.order.service.OrderService;
 import com.mirs.agent.business.order.service.RefundApplicationService;
@@ -34,13 +36,12 @@ public class OrderController {
     @GetMapping("/{orderId}")
     public OrderResponse getOrder(
             @PathVariable @NotBlank String orderId,
-            @RequestHeader("X-Tenant-Id") @NotBlank String tenantId,
-            @RequestHeader("X-User-Id") @NotBlank String userId
+            @AuthenticationPrincipal Actor actor
     ) {
         CustomerOrder order = orderService.getOwnedOrder(
-                tenantId,
+                actor.tenantId(),
                 orderId,
-                userId
+                actor.userId()
         );
         return OrderResponse.from(order);
     }
@@ -49,14 +50,13 @@ public class OrderController {
     @ResponseStatus(HttpStatus.ACCEPTED)
     public OrderResponse requestRefund(
             @PathVariable @NotBlank String orderId,
-            @RequestHeader("X-Tenant-Id") @NotBlank String tenantId,
-            @RequestHeader("X-User-Id") @NotBlank String userId,
+            @AuthenticationPrincipal Actor actor,
             @RequestHeader("Idempotency-Key") @NotBlank String idempotencyKey
     ) {
         return refundApplicationService.requestRefund(
-                tenantId,
+                actor.tenantId(),
                 orderId,
-                userId,
+                actor.userId(),
                 idempotencyKey
         );
     }

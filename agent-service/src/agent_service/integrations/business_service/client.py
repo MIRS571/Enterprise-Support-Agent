@@ -58,7 +58,7 @@ class BusinessServiceClient:
     ) -> OrderResponse:
         encoded_order_id = quote(order_id, safe="")
         response = await self._get_with_retry(
-            path=f"/api/v1/orders/{encoded_order_id}",
+            path=f"/internal/v1/orders/{encoded_order_id}",
             headers=self._trusted_headers(
                 tenant_id=tenant_id,
                 user_id=user_id,
@@ -89,7 +89,7 @@ class BusinessServiceClient:
         encoded_order_id = quote(order_id, safe="")
         try:
             response = await self._http_client.post(
-                (f"/api/v1/orders/{encoded_order_id}/refund-requests"),
+                (f"/internal/v1/orders/{encoded_order_id}/refund-requests"),
                 headers={
                     **self._trusted_headers(
                         tenant_id=tenant_id,

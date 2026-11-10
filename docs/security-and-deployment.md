@@ -1,3 +1,5 @@
+> 历史基线：下文早期部署记录保留。2026-10-21 已完成 JWT / Spring Security / Redis 退出黑名单及登录前端，当前认证实现和实测结果以 [authentication.md](authentication.md) 为准；旧 Compose / 评测记录不代表本次重新验证。
+
 # 安全清单与部署验收证据
 
 最后更新：2026-09-01
@@ -6,7 +8,7 @@
 
 当前状态：**开发环境核心功能通过，完整容器化部署部分通过，生产安全验收未通过。**
 
-原因很明确：Java、Python 和四个基础设施组件都已有真实运行证据，21 次真实全链路评测也已通过；但 Python 镜像构建和全 Compose 联合启动被主动延期，Java 入口目前仍使用可信身份请求头模拟认证，而不是真实 JWT。
+原因很明确：Java、Python 和四个基础设施组件都已有真实运行证据，21 次真实全链路评测也已通过；但 Python 镜像构建和全 Compose 联合启动被主动延期，当时 Java 入口仍使用身份请求头模拟认证（现已由 JWT 替换）。
 
 ## 2. 最终安全清单
 
@@ -16,7 +18,7 @@
 | 租户与用户隔离 | 通过 | MySQL 查询和 Qdrant Filter 均在查询阶段限制租户；越权会话统一返回 404 |
 | Java → Python 服务鉴权 | 通过 | Agent 路由要求 `X-Internal-Service-Token`，Java WebClient 统一添加该请求头 |
 | Python 不直接暴露给外网 | Compose 通过 | `agent-service` 只使用 `expose: 8000`，外部入口为 Java 的 8080 |
-| 用户真实认证 | 待生产实现 | Java 当前信任 `X-Tenant-Id`、`X-User-Id`；生产环境必须改为网关或 Spring Security 校验 JWT 后生成可信身份 |
+| 用户真实认证 | 已实现并本地联调 | JWT 验签、账号状态、Redis jti 黑名单；外部身份头无效 |
 | 高风险退款人工确认 | 通过 | LangGraph `interrupt` 暂停，恢复时只接受明确的 `approved: bool` |
 | 退款并发与重复提交 | 通过 | MySQL 条件更新保证原子性，Redis Lua 和幂等 Key 控制重复请求 |
 | RAG 无依据时禁止自由回答 | 通过 | 无上下文或 Qdrant 不可用时返回固定提示，不调用模型编造答案 |
@@ -33,7 +35,7 @@
 
 ```text
 客户端
-  → Java：未来由 JWT 验证用户身份
+  → Java：Spring Security 验证 JWT、账号状态和 Redis 黑名单
   → Python：共享内部令牌验证调用者是 Java
   → LangGraph：只使用 Java 提供的可信 tenant_id / user_id
   → Java/MySQL：再次执行租户、用户和业务状态校验
@@ -94,7 +96,7 @@ curl http://127.0.0.1:8080/api/v1/system/info
 
 ## 5. 上线前必须完成
 
-1. Java 接入真实 JWT/Spring Security，不再信任外部直接传入的身份头。
+1. 已完成：Java JWT/Spring Security，外部身份头不再参与认证。生产还需 HTTPS、密钥管理与账号运维。
 2. 轮换已经暴露过的 PostgreSQL 密码，并轮换内部服务令牌。
 3. 完成 Python CPU 镜像和全 Compose 冒烟验收。
 4. 取消数据库与 Qdrant 的公网端口映射，或使用严格防火墙和认证。

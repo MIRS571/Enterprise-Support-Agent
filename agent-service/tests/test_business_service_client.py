@@ -167,7 +167,7 @@ def test_request_refund_returns_refunding_order_without_retry() -> None:
     async def scenario() -> None:
         async def handler(request: httpx.Request) -> httpx.Response:
             assert request.method == "POST"
-            assert request.url.path == ("/api/v1/orders/A1001/refund-requests")
+            assert request.url.path == ("/internal/v1/orders/A1001/refund-requests")
             assert request.headers["X-Tenant-Id"] == "company_001"
             assert request.headers["X-User-Id"] == "U1001"
             assert request.headers["Idempotency-Key"] == "refund-001"

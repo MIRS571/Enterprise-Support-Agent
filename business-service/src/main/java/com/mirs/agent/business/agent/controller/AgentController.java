@@ -1,6 +1,8 @@
 package com.mirs.agent.business.agent.controller;
 
 import com.mirs.agent.business.agent.client.AgentServiceClient;
+import com.mirs.agent.business.auth.Actor;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import com.mirs.agent.business.agent.dto.AgentApprovalDecisionRequest;
 import com.mirs.agent.business.agent.dto.AgentChatRequest;
 import com.mirs.agent.business.agent.dto.AgentChatResponse;
@@ -35,15 +37,14 @@ public class AgentController {
 
     @PostMapping("/threads")
     public Mono<ResponseEntity<AgentThreadResponse>> createThread(
-            @RequestHeader("X-Tenant-Id") @NotBlank String tenantId,
-            @RequestHeader("X-User-Id") @NotBlank String userId,
+            @AuthenticationPrincipal Actor actor,
             @RequestAttribute(
                     RequestCorrelationFilter.REQUEST_ID_ATTRIBUTE
             ) String requestId
     ) {
         return agentServiceClient.createThread(
-                tenantId,
-                userId,
+                actor.tenantId(),
+                actor.userId(),
                 requestId
         );
     }
@@ -53,16 +54,15 @@ public class AgentController {
             produces = MediaType.TEXT_EVENT_STREAM_VALUE
     )
     public Mono<ResponseEntity<Flux<ServerSentEvent<String>>>> streamChat(
-            @RequestHeader("X-Tenant-Id") @NotBlank String tenantId,
-            @RequestHeader("X-User-Id") @NotBlank String userId,
+            @AuthenticationPrincipal Actor actor,
             @RequestAttribute(
                     RequestCorrelationFilter.REQUEST_ID_ATTRIBUTE
             ) String requestId,
             @Valid @RequestBody AgentChatRequest request
     ) {
         return agentServiceClient.streamChat(
-                tenantId,
-                userId,
+                actor.tenantId(),
+                actor.userId(),
                 requestId,
                 request
         );
@@ -71,8 +71,7 @@ public class AgentController {
     @PostMapping("/threads/{threadId}/resume")
     public Mono<ResponseEntity<AgentChatResponse>> resumeThread(
             @PathVariable @NotBlank String threadId,
-            @RequestHeader("X-Tenant-Id") @NotBlank String tenantId,
-            @RequestHeader("X-User-Id") @NotBlank String userId,
+            @AuthenticationPrincipal Actor actor,
             @RequestHeader("Idempotency-Key")
             @NotBlank
             String idempotencyKey,
@@ -82,8 +81,8 @@ public class AgentController {
             @Valid @RequestBody AgentApprovalDecisionRequest request
     ) {
         return agentServiceClient.resumeThread(
-                tenantId,
-                userId,
+                actor.tenantId(),
+                actor.userId(),
                 requestId,
                 threadId,
                 idempotencyKey,

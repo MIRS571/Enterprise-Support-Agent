@@ -33,8 +33,9 @@ def test_live_client_creates_a_fresh_thread_for_every_run() -> None:
 
     async def handler(request: httpx.Request) -> httpx.Response:
         nonlocal created
-        assert request.headers["X-Tenant-Id"] == "evaluation_001"
-        assert request.headers["X-User-Id"] == "EVAL_U1001"
+        assert request.headers["Authorization"] == "Bearer test-jwt"
+        assert "X-Tenant-Id" not in request.headers
+        assert "X-User-Id" not in request.headers
         if request.url.path == "/api/v1/agent/threads":
             thread_id = thread_ids[created]
             created += 1
@@ -73,7 +74,10 @@ def test_live_client_creates_a_fresh_thread_for_every_run() -> None:
             transport=httpx.MockTransport(handler),
             base_url="http://java-service",
         ) as http_client:
-            client = JavaAgentLiveClient(http_client)
+            client = JavaAgentLiveClient(
+                http_client,
+                identity_tokens={f"{case.tenant_id}/{case.user_id}": "test-jwt"},
+            )
             first = await client.run_case(case)
             second = await client.run_case(case)
 
@@ -135,7 +139,10 @@ def test_live_client_observes_approval_without_resuming_mutation() -> None:
             transport=httpx.MockTransport(handler),
             base_url="http://java-service",
         ) as http_client:
-            observation = await JavaAgentLiveClient(http_client).run_case(case)
+            observation = await JavaAgentLiveClient(
+                http_client,
+                identity_tokens={f"{case.tenant_id}/{case.user_id}": "test-jwt"},
+            ).run_case(case)
 
         result = evaluate_live_agent_case(case, observation)
         assert observation.outcome == "approval_required"
@@ -196,7 +203,10 @@ def test_live_client_compares_sources_at_document_level() -> None:
             transport=httpx.MockTransport(handler),
             base_url="http://java-service",
         ) as http_client:
-            observation = await JavaAgentLiveClient(http_client).run_case(case)
+            observation = await JavaAgentLiveClient(
+                http_client,
+                identity_tokens={f"{case.tenant_id}/{case.user_id}": "test-jwt"},
+            ).run_case(case)
 
         assert observation.source_document_ids == ["refund-policy"]
         assert evaluate_live_agent_case(case, observation).public_contract_passed
@@ -226,6 +236,25 @@ def test_live_client_rejects_incomplete_stream() -> None:
                 LiveEvaluationProtocolError,
                 match="either result or approval_required",
             ):
-                await JavaAgentLiveClient(http_client).run_case(case)
+                await JavaAgentLiveClient(
+                    http_client,
+                    identity_tokens={f"{case.tenant_id}/{case.user_id}": "test-jwt"},
+                ).run_case(case)
 
     asyncio.run(scenario())
+
+
+def test_live_client_rejects_missing_identity_token_before_network() -> None:
+    case = load_agent_evaluation_cases(Path("data/evaluation/agent_cases.json"))[0]
+
+    async def run():
+        async def handler(request):
+            raise AssertionError("Unauthenticated requests must not be sent")
+
+        async with httpx.AsyncClient(
+            base_url="http://java", transport=httpx.MockTransport(handler)
+        ) as client:
+            with pytest.raises(ValueError, match="Missing authenticated"):
+                await JavaAgentLiveClient(client, identity_tokens={}).run_case(case)
+
+    asyncio.run(run())
